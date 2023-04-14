@@ -10,6 +10,7 @@ import ChatBot from './pages/ChatBot';
 import { Header } from './Components/Header/Header';
 import Settings from './pages/Settings';
 import FAQ from './pages/FAQ';
+import Create from './pages/Create';
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
           <Route path="/chatbot" element={<ChatBot />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/create" element={<Create />} />
+          
         </Routes>
       
    </div>

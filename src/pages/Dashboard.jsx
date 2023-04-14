@@ -1,11 +1,11 @@
 import React from 'react'
 import { Button, Container, Heading } from '@chakra-ui/react'
-
+import { Link } from 'react-router-dom'
 function Dashboard() {
   return (
     <Container>
       <Heading textAlign="center" marginBottom='24px'>Dashboard</Heading>
-      <Button margin="auto" display="block">Create New Bot</Button>
+      <Link to='/create'><Button margin="auto" display="block">Create New Bot</Button></Link>
     </Container>
   )
 }
