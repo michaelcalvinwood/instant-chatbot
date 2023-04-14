@@ -1,9 +1,12 @@
 import React from 'react'
-import { Container } from '@chakra-ui/react'
+import { Button, Container, Heading } from '@chakra-ui/react'
 
 function Dashboard() {
   return (
-    <div>Dashboard</div>
+    <Container>
+      <Heading textAlign="center" marginBottom='24px'>Dashboard</Heading>
+      <Button margin="auto" display="block">Create New Bot</Button>
+    </Container>
   )
 }
 
