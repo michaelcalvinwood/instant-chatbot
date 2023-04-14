@@ -8,6 +8,8 @@ import Purchase from './pages/Purchase';
 import Dashboard from './pages/Dashboard';
 import ChatBot from './pages/ChatBot';
 import { Header } from './Components/Header/Header';
+import Settings from './pages/Settings';
+import FAQ from './pages/FAQ';
 
 function App() {
   return (
@@ -20,7 +22,8 @@ function App() {
           <Route path="/purchase" element={<Purchase />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/chatbot" element={<ChatBot />} />
-          
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/faq" element={<FAQ />} />
         </Routes>
       
    </div>
