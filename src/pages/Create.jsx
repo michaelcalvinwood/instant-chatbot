@@ -8,8 +8,17 @@ function Create() {
     const [contentType, setContentType] = useState('pdf');
     const [websites, setWebsites] = useState('');
     const [botId, setBotId] = useState('');
+    const [bytes, setBytes] = useState(0);
 
     //console.log('contentType', contentType, websites)
+
+    function bytesToSize() {
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+        if (bytes === 0) return ''
+        const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10)
+        if (i === 0) return `${bytes} ${sizes[i]}`
+        return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`
+      }
 
     const handleDeployment = () => {
         console.log('handle deployment')
@@ -28,7 +37,7 @@ function Create() {
     
     <Container backgroundColor='white'>
         <Heading as='h1' textAlign="center">Create Bot</Heading>
-        <Heading as='h2' size='xs' textAlign='center'>{botId}</Heading>
+        <Heading as='h2' size='xs' textAlign='center'>{bytesToSize()}</Heading>
             <Box
             as="section"
             bg="bg-surface"
