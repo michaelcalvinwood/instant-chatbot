@@ -1,20 +1,20 @@
 import logo from './logo.svg';
 import './App.css';
-import { Container, Heading } from '@chakra-ui/react';
+import { Box, Container, Heading } from '@chakra-ui/react';
 import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Purchase from './pages/Purchase';
 import Dashboard from './pages/Dashboard';
 import ChatBot from './pages/ChatBot';
-import { Header } from './Components/Header/Header';
+import { Header } from './Components/Header/Header2';
 import Settings from './pages/Settings';
 import FAQ from './pages/FAQ';
 import Create from './pages/Create';
 
 function App() {
   return (
-    <div>
+    <Box backgroundColor='white' height="100vh">
      
         <Header/>
         <Routes>
@@ -29,7 +29,7 @@ function App() {
           
         </Routes>
       
-   </div>
+   </Box>
   );
 }
 

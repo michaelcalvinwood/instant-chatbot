@@ -28,7 +28,7 @@ import {
         }}
         width="100%"
       >
-        <Box as="nav" bg="bg-accent" color="on-accent">
+        <Box as="nav" bg="bg-surface" box>
           <Container
             py={{
               base: '3',
