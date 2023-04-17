@@ -1,11 +1,13 @@
 
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { Box, Container, Heading, FormControl, FormLabel, Input, Stack, Text, Flex, Select, Button, Textarea } from '@chakra-ui/react'
 import {useDropzone} from 'react-dropzone'
+import { v4 as uuidv4 } from 'uuid';
 
 function Create() {
     const [contentType, setContentType] = useState('pdf');
     const [websites, setWebsites] = useState('');
+    const [botId, setBotId] = useState('');
 
     //console.log('contentType', contentType, websites)
 
@@ -17,11 +19,16 @@ function Create() {
         console.log('files', acceptedFiles);
       }, [])
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
-    
+
+    useEffect(() => {
+        if (!botId) setBotId(uuidv4());
+    })
+
   return (
     
     <Container backgroundColor='white'>
-        <Heading textAlign="center">Create</Heading>
+        <Heading as='h1' textAlign="center">Create Bot</Heading>
+        <Heading as='h2' size='xs' textAlign='center'>{botId}</Heading>
             <Box
             as="section"
             bg="bg-surface"
