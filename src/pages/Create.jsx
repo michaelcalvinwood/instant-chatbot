@@ -64,13 +64,11 @@ function Create() {
                 <option value='scanned'>Scanned PDF</option>
                 <option value='docx'>DOCX</option>
             </Select>
-            <Box marginTop="8px" height="96px" padding='1.5rem 1rem .5rem 1rem' border='1px solid var(--chakra-colors-gray-200)' borderRadius='8px' cursor='pointer'>
+            <Box marginTop="8px" height="96px" padding='.5rem' border='1px solid var(--chakra-colors-gray-200)' borderRadius='8px' cursor='pointer'>
                 <div {...getRootProps()}>
                     <input {...getInputProps()} />
                     {
-                        isDragActive ?
-                        <p>Drop the files here ...</p> :
-                        <p>Drag 'n' drop some files here, or click to select files</p>
+                        <p style={{height:'6rem', width:'100%'}}>&nbsp;Drag 'n' drop some files here, or click to select files</p>
                     }
                 </div>
             </Box>
