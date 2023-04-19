@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { Box, Container, Heading, FormControl, FormLabel, Input, Stack, Text, Flex, Select, Button, Textarea, Alert, AlertIcon } from '@chakra-ui/react'
 import {useDropzone} from 'react-dropzone'
 
@@ -8,10 +8,17 @@ function Create() {
     const [websites, setWebsites] = useState('');
     const [botId, setBotId] = useState('');
     const [bytes, setBytes] = useState(0);
-    const [openAIKeys, setOpenAiKeys] =  useState([]);
+    const [openAIKeys, _setOpenAiKeys] =  useState([]);
     const [alertStatus, setAlertStatus] = useState('success');
     const [alertMessage, setAlertMessage] = useState('');
 
+    const openAIKeyRef = useRef('');
+
+
+    const setOpenAiKeys = value => {
+        openAIKeyRef.current = value;
+        _setOpenAiKeys(value);
+    }
     //console.log('contentType', contentType, websites)
 
     function bytesToSize() {
@@ -23,11 +30,25 @@ function Create() {
       }
 
     const handleDeployment = () => {
-        console.log('handle deployment')
+       
+    }
+
+    const updateBotConfig = () => {
+        console.log('update bot config at config.instantchatbot.net', openAIKeyRef.current);
     }
 
     const onDrop = useCallback(acceptedFiles => {
-        
+        if (!openAIKeys.length) {
+            setAlertStatus('error');
+            setAlertMessage('Please enter OpenAI Key before uploading files.');
+            return;
+        }
+
+        if (!openAIKeys.length) {
+            setAlertStatus('error');
+            setAlertMessage('Please provide at least one website name before uploading files.');
+            return;
+        }
        
         console.log('files', acceptedFiles);
       }, [])
@@ -48,7 +69,7 @@ function Create() {
             pt="8"
             mb='0'
         >
-        <Alert status={alertStatus} visibility={alertStatus && alertMessage ? 'visible' : 'hidden'}>
+        <Alert status={alertStatus} marginBottom='8px' visibility={alertStatus && alertMessage ? 'visible' : 'hidden'}>
             <AlertIcon />
              {alertMessage}
         </Alert>
@@ -58,10 +79,23 @@ function Create() {
                 <Text>
                     OpenAI API Key
                 </Text>
-                <Input id="medium" size="md" placeholder=" " data-peer onChange={(e) => setOpenAiKeys([`${e.target.value}`])}/>
+                <Input id="medium" size="md" placeholder=" " data-peer 
+                    onChange={(e) => {
+                        setAlertMessage('');
+                        setOpenAiKeys([`${e.target.value}`])
+                        updateBotConfig();
+                    }}
+                        
+                />
             </FormControl>
             <Text marginTop="24px">Websites</Text>
-            <Textarea value={websites} onChange={(e) => setWebsites(e.target.value)} color='black' />
+            <Textarea value={websites}  color='black' 
+                onChange={(e) => {
+                    setAlertMessage('');
+                    setWebsites(e.target.value)
+                }}
+                  
+            />
 
             <Text marginTop="24px">Content</Text>
             <Select value={contentType} onChange={(e) => console.log(setContentType(e.target.value))}>
