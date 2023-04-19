@@ -6,13 +6,16 @@ import reportWebVitals from './reportWebVitals';
 import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter } from 'react-router-dom';
 import { theme as proTheme } from '@chakra-ui/pro-theme'
-import { extendTheme, theme as baseTheme } from '@chakra-ui/react'
+import { extendTheme, theme as baseTheme, ColorModeScript } from '@chakra-ui/react'
 
 export const theme = extendTheme(
   {
     colors: { ...baseTheme.colors, brand: baseTheme.colors.blue },
+    initialColorMode: 'light',
+    useSystemColorMode: false,
   },
   proTheme,
+  
 )
 
 
@@ -20,6 +23,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <ChakraProvider theme={theme}>
+    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <App />
     </ChakraProvider>
   </BrowserRouter>
