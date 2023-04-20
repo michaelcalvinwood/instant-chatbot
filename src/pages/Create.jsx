@@ -2,24 +2,32 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { Box, Container, Heading, FormControl, FormLabel, Input, Stack, Text, Flex, Select, Button, Textarea, Alert, AlertIcon } from '@chakra-ui/react'
 import {useDropzone} from 'react-dropzone'
+import {uuid as uuidv4} from 'uuid';
 
-function Create() {
+function Create({accountId}) {
     const [contentType, setContentType] = useState('pdf');
-    const [websites, setWebsites] = useState('');
+    const [websites, _setWebsites] = useState('');
     const [botId, setBotId] = useState('');
     const [bytes, setBytes] = useState(0);
     const [openAIKeys, _setOpenAiKeys] =  useState([]);
     const [alertStatus, setAlertStatus] = useState('success');
     const [alertMessage, setAlertMessage] = useState('');
+    const [dataAdded, setDataAdded] = useState(false);
 
-    const openAIKeyRef = useRef('');
+    //console.log('openAIKeys', openAIKeys, websites);
 
+    const openAIKeysRef = useRef('');
+    const websitesRef = useRef('');
 
     const setOpenAiKeys = value => {
-        openAIKeyRef.current = value;
+        openAIKeysRef.current = value;
         _setOpenAiKeys(value);
     }
-    //console.log('contentType', contentType, websites)
+
+    const setWebsites = value => {
+        websitesRef.current = value;
+        _setWebsites(value);
+    }
 
     function bytesToSize() {
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
@@ -34,23 +42,44 @@ function Create() {
     }
 
     const updateBotConfig = () => {
-        console.log('update bot config at config.instantchatbot.net', openAIKeyRef.current);
+        if (!dataAdded) return;
+
+        console.log('update bot config at config.instantchatbot.net', openAIKeysRef.current, websitesRef.current, accountId);
+
     }
 
-    const onDrop = useCallback(acceptedFiles => {
-        if (!openAIKeys.length) {
+    const onDrop = useCallback( async acceptedFiles => {
+        if (!openAIKeysRef.current.length) {
             setAlertStatus('error');
             setAlertMessage('Please enter OpenAI Key before uploading files.');
             return;
         }
 
-        if (!openAIKeys.length) {
+        if (!websitesRef.current) {
             setAlertStatus('error');
             setAlertMessage('Please provide at least one website name before uploading files.');
             return;
         }
-       
+
+        /*
+         * TODO: Validate that file is an accepted type here
+         */
+
+        let workingBotId;
+
+        if (!dataAdded) {
+            workingBotId = uuidv4();
+            // await setConfig()
+            
+        } else workingBotId = botId;
+
+        // get assigned ingestor
+        // await submit file to assigned ingestor
+        // report ingestor message
+
         console.log('files', acceptedFiles);
+
+        if (!botId) setBotId(workingBotId);
       }, [])
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
@@ -92,7 +121,8 @@ function Create() {
             <Textarea value={websites}  color='black' 
                 onChange={(e) => {
                     setAlertMessage('');
-                    setWebsites(e.target.value)
+                    setWebsites(e.target.value);
+                    updateBotConfig();
                 }}
                   
             />
