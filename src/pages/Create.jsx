@@ -2,7 +2,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { Box, Container, Heading, FormControl, FormLabel, Input, Stack, Text, Flex, Select, Button, Textarea, Alert, AlertIcon } from '@chakra-ui/react'
 import {useDropzone} from 'react-dropzone'
-import {uuid as uuidv4} from 'uuid';
+//import {uuid as uuidv4} from 'uuid';
 
 function Create({accountId}) {
     const [contentType, setContentType] = useState('pdf');
@@ -48,6 +48,26 @@ function Create({accountId}) {
 
     }
 
+    const setConfig = async botId => {
+
+        /*
+         * TODO: Dynamically get available server info
+         */
+
+        const ingestServer = 'ingest-1.instantchatbot.net';
+        const qdrantServer = 'qdrant-1.instantchatbot.net';
+        const appServer = 'app-1.instantchatbot.net';
+        
+        const request = {
+            url: '',
+            method: 'post',
+            data: {
+                ingestServer, qdrantServer, appServer, botId, openAIKeys, websites, accountId
+            }
+        }
+
+    }
+
     const onDrop = useCallback( async acceptedFiles => {
         if (!openAIKeysRef.current.length) {
             setAlertStatus('error');
@@ -68,7 +88,7 @@ function Create({accountId}) {
         let workingBotId;
 
         if (!dataAdded) {
-            workingBotId = uuidv4();
+            //workingBotId = uuidv4();
             // await setConfig()
             
         } else workingBotId = botId;

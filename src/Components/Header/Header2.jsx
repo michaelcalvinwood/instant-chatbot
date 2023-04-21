@@ -56,10 +56,10 @@ export const Header = () => {
                   <Link to="./"><Button aria-current={pathname === '/' ? 'page' : ''}>Home</Button></Link>
                   <Link to="./dashboard"><Button aria-current={pathname === '/dashboard' ? 'page' : ''}>Dashboard</Button></Link>
                   <Link to="./create"><Button aria-current={pathname === '/create' ? 'page' : ''}>Create</Button></Link>
-                  <Link to="./purchase"><Button aria-current={pathname === '/purchase' ? 'page' : ''}>Credits</Button></Link>
+              
+                  <Link to="./purchase"><Button aria-current={pathname === '/purchase' ? 'page' : ''}>Purchase</Button></Link>
+                  <Link to="./login"><Button aria-current={pathname === '/login' ? 'page' : ''}>Login</Button></Link>
                   
-                  <Link to="./signup"><Button aria-current={pathname === '/signup' ? 'page' : ''}>Login</Button></Link>
-                  <Link to="./login"><Button aria-current={pathname === '/login' ? 'page' : ''}>Sign Up</Button></Link>
                 </ButtonGroup>
               )}
             </HStack>
