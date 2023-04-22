@@ -54,6 +54,12 @@ function Login() {
 
   }
 
+  const updateUserName = e => {
+    const val = e.target.value;
+    var regex = new RegExp(/^[A-Za-z][A-Za-z0-9\-]*$/gm);
+    if (regex.test(val)) setUserName(val); 
+    setAlertMessage('')
+  }
 
   const signupForm = () => {
   
@@ -70,7 +76,7 @@ function Login() {
           <Stack spacing="5">
             <FormControl isRequired>
               <FormLabel htmlFor="name">User Name</FormLabel>
-              <Input id="name" type="text" onChange={(e) =>{setUserName(e.target.value); setAlertMessage('')}}/>
+              <Input id="name" type="text" value={userName} onChange={updateUserName}/>
             </FormControl>
             <FormControl isRequired>
               <FormLabel htmlFor="email">Email</FormLabel>
