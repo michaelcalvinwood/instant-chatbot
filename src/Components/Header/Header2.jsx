@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom';
 import InstantChatBotIcon from '../../assets/images/instantChatBotoLogo.svg'
 import * as qs from 'qs';
 
-export const Header = () => {
+export const Header = ({userName}) => {
   let location = useLocation();
   let {pathname} = location;
   console.log(location)
@@ -67,10 +67,10 @@ export const Header = () => {
               {isDesktop && (
                 <ButtonGroup variant="ghost" spacing="1">
                   <Link to="./"><Button aria-current={pathname === '/' ? 'page' : ''}>Home</Button></Link>
-                  <Link to="./dashboard"><Button aria-current={pathname === '/dashboard' ? 'page' : ''}>Dashboard</Button></Link>
-                  <Link to="./create"><Button aria-current={pathname === '/create' ? 'page' : ''}>Create</Button></Link>
+                  <Link to={userName ? "./dashboard" : '/login'}><Button aria-current={pathname === '/dashboard' ? 'page' : ''}>Dashboard</Button></Link>
+                  <Link to={userName ? "./create" : '/login'}><Button aria-current={pathname === '/create' ? 'page' : ''}>Create</Button></Link>
               
-                  <Link to="./purchase"><Button aria-current={pathname === '/purchase' ? 'page' : ''}>Purchase</Button></Link>
+                  <Link to={userName ? "./purchase" : '/login'}><Button aria-current={pathname === '/purchase' ? 'page' : ''}>Purchase</Button></Link>
                   <Link to="./signup"><Button aria-current={pathname === '/signup' ? 'page' : ''}>Signup</Button></Link>
                   <Link to="./login"><Button aria-current={pathname === '/login' ? 'page' : ''}>Login</Button></Link>
                 </ButtonGroup>

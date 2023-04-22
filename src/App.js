@@ -25,7 +25,9 @@ function App() {
   return (
     <Box backgroundColor='white' height="100vh">
      
-        <Header/>
+        <Header 
+          userName={userName}
+        />
         <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/login" 
