@@ -58,7 +58,7 @@ export const Header = () => {
                   <Link to="./create"><Button aria-current={pathname === '/create' ? 'page' : ''}>Create</Button></Link>
               
                   <Link to="./purchase"><Button aria-current={pathname === '/purchase' ? 'page' : ''}>Purchase</Button></Link>
-                  <Link to="./login"><Button aria-current={pathname === '/login' ? 'page' : ''}>Login</Button></Link>
+                  <Link to="./login"><Button aria-current={pathname === '/login' ? 'page' : ''}>Access</Button></Link>
                   
                 </ButtonGroup>
               )}

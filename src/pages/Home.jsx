@@ -27,11 +27,11 @@ function Home() {
         </UnorderedList>
         </Text>
         <Text paddingTop=".75rem">
-            You can create as many chatbots for your website as you want, <strong>starting as low as $19.99 per month.</strong></Text>
+            You can create as many chatbots for your website as you want, and you can <strong>get started for free.</strong></Text>
         <Text paddingTop=".75rem">
             Questions? Our chatbot will be happy to assist you. Just click the "Instant Chatbot AI" in the bottom-right corner.
         </Text>
-        <Link to="./purchase">
+        <Link to="./login?signup=gs">
             <Button display="block" margin="1rem auto">Get Started</Button>
         </Link>
         
