@@ -26,17 +26,34 @@ import * as complexity from 'complexity'
 import isEmail from 'validator/lib/isEmail';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 function Login(props) {
+  const {userName, setUserName} = props;
+  console.log('Login', userName);
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [userName, setUserName] = useState('');
   const [alertType, setAlertType] = useState('error');
-  const [alertMessage, setAlertMessage] = useState('')
+  const [alertMessage, setAlertMessage] = useState('');
+ 
+  let history = useNavigate();
 
   const showAlert = (type, message) => {
     setAlertType(type);
     setAlertMessage(message);
+  }
+
+  const setInfo = info => {
+    console.log('info', info)
+    console.log(props.setUserName);
+    console.log(info.userName);
+    props.setUserName(info.userName);
+    props.setStorageTokens(info.storageTokens);
+    props.setQueryTokens(info.queryStorage);
+    props.setHasKey(info.hasKey);
+    props.setToken(info.token);
+    history('/dashboard');
   }
 
   const loginToAccount = () => {
@@ -54,13 +71,7 @@ function Login(props) {
     axios(request)
     .then(response => {
       const info = response.data;
-      console.log('info', info)
-      props.setUserName(info.userName);
-      props.setStorageTokens(info.storageTokens);
-      props.setQueryTokens(info.queryStorage);
-      props.setHasKey(info.hasKey);
-      props.setToken(info.token);
-      window.location.href = '/dashboard';
+      setInfo(info);
     })
     .catch(err => {
       console.error(err);
@@ -73,6 +84,7 @@ function Login(props) {
   }
 
   const updateUserName = e => {
+    console.log('updateUserName');
     const val = e.target.value;
     var regex = new RegExp(/^[A-Za-z][A-Za-z0-9\-]*$/gm);
     if (regex.test(val)) setUserName(val); 

@@ -20,6 +20,8 @@ function App() {
   const [userName, setUserName] = useState('');
   const [token, setToken] = useState(null);
 
+  console.log('App', userName);
+
   return (
     <Box backgroundColor='white' height="100vh">
      
@@ -29,6 +31,7 @@ function App() {
           <Route path="/login" 
             element={
               <Login 
+                userName={userName}
                 setUserName={setUserName}
                 setStorageTokens={setStorageTokens}
                 setQueryTokens={setQueryTokens}
@@ -39,7 +42,18 @@ function App() {
           />
           <Route path="/signup" element={<Signup />} />
           <Route path="/purchase" element={<Purchase />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" 
+            element={
+              <Dashboard 
+                userName={userName}
+                storageTokens={storageTokens}
+                queryTokens={queryTokens}
+                hasKey={hasKey}
+                token={token}
+              />
+            } 
+          
+          />
           <Route path="/chatbot" element={<ChatBot />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/faq" element={<FAQ />} />
