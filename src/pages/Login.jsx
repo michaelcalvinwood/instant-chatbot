@@ -23,7 +23,7 @@ import {
 import InstantChatBotIcon from '../assets/images/instantChatBotoLogo.svg';
 import { set } from 'lodash';
 import * as complexity from 'complexity'
-
+import isEmail from 'validator/lib/isEmail';
 
 function Login() {
   const [intention, setIntention] = useState('Login');
@@ -36,6 +36,7 @@ function Login() {
 
   const createAccount = () => {
     if (!email) return setAlertMessage('Please enter an email address.');
+    if (!isEmail(email)) return setAlertMessage('Please enter a valid email address.');
     if (!userName) return setAlertMessage('Please enter a user name');
     if (!password) return setAlertMessage('Please enter a password');
     const options = {
