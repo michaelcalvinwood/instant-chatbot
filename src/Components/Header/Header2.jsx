@@ -15,11 +15,24 @@ import { Logo } from './Logo'
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import InstantChatBotIcon from '../../assets/images/instantChatBotoLogo.svg'
+import * as qs from 'qs';
 
 export const Header = () => {
   let location = useLocation();
   let {pathname} = location;
   console.log(location)
+
+  let login = false;
+  let signup = false;
+
+  const query = qs.parse(window.location.search.substring(1));
+  
+  if (pathname === '/login') {
+    if (typeof query.signup !== 'undefined') signup = true;
+    else login = true;
+  }
+
+  console.log('signup, login', signup, login);
 
   const isDesktop = useBreakpointValue({
     base: false,
@@ -58,8 +71,8 @@ export const Header = () => {
                   <Link to="./create"><Button aria-current={pathname === '/create' ? 'page' : ''}>Create</Button></Link>
               
                   <Link to="./purchase"><Button aria-current={pathname === '/purchase' ? 'page' : ''}>Purchase</Button></Link>
-                  <Link to="./login"><Button aria-current={pathname === '/login' ? 'page' : ''}>Access</Button></Link>
-                  
+                  <Link to="./signup"><Button aria-current={pathname === '/signup' ? 'page' : ''}>Signup</Button></Link>
+                  <Link to="./login"><Button aria-current={pathname === '/login' ? 'page' : ''}>Login</Button></Link>
                 </ButtonGroup>
               )}
             </HStack>

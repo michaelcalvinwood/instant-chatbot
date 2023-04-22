@@ -11,8 +11,11 @@ import { Header } from './Components/Header/Header2';
 import Settings from './pages/Settings';
 import FAQ from './pages/FAQ';
 import Create from './pages/Create';
-
+import { useState } from 'react';
+import Signup from './pages/Signup';
 function App() {
+
+
   return (
     <Box backgroundColor='white' height="100vh">
      
@@ -20,6 +23,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/purchase" element={<Purchase />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/chatbot" element={<ChatBot />} />
