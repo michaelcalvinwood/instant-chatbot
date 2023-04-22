@@ -24,21 +24,28 @@ import InstantChatBotIcon from '../assets/images/instantChatBotoLogo.svg';
 import { set } from 'lodash';
 import * as complexity from 'complexity'
 import isEmail from 'validator/lib/isEmail';
+import axios from 'axios';
 
 function Login() {
   const [intention, setIntention] = useState('Login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userName, setUserName] = useState('');
+  const [alertType, setAlertType] = useState('error');
   const [alertMessage, setAlertMessage] = useState('')
 
   console.log(userName, password, email);
 
+  const showAlert = (type, message) => {
+    setAlertType(type);
+    setAlertMessage(message);
+  }
+
   const createAccount = () => {
-    if (!email) return setAlertMessage('Please enter an email address.');
-    if (!isEmail(email)) return setAlertMessage('Please enter a valid email address.');
-    if (!userName) return setAlertMessage('Please enter a user name');
-    if (!password) return setAlertMessage('Please enter a password');
+    if (!email) return showAlert('error', 'Please enter an email address.');
+    if (!isEmail(email)) return showAlert('error', 'Please enter a valid email address.');
+    if (!userName) return showAlert('error', 'Please enter a user name');
+    if (!password) return showAlert('error', 'Please enter a password');
     const options = {
       min: 8,
       uppercase    : 1,  // A through Z
@@ -46,8 +53,20 @@ function Login() {
       special      : 1,  // ! @ # $ & *
       digit        : 1,  // 0 through 9
     }
-    if (password.indexOf(' ') !== -1) return setAlertMessage('Spaces are not allowed in password');
-    if (!complexity.check(password, options)) return setAlertMessage('Password must be at least 8 characters with at least 1 uppercase, 1 lowercase, 1 digit, and 1 special character.')
+    if (password.indexOf(' ') !== -1) return showAlert('error', 'Spaces are not allowed in password');
+    if (!complexity.check(password, options)) return showAlert('error', 'Password must be at least 8 characters with at least 1 uppercase, 1 lowercase, 1 digit, and 1 special character.')
+  
+    const request = {
+      url: 'https://admin.instantchatbot.net:6200/signup',
+      method: 'post',
+      data: {
+        password, email, userName
+      }
+    }
+
+    axios(request)
+    .then(response => showAlert('success', `Verification email has been sent to ${email}. If you do not see it, please check your spam folder.`))
+    .catch(err => showAlert('error', `Unable to send verification email to ${email}. Please use another email address, or try again.`))
   }
 
   const login = () => {
@@ -59,6 +78,16 @@ function Login() {
     var regex = new RegExp(/^[A-Za-z][A-Za-z0-9\-]*$/gm);
     if (regex.test(val)) setUserName(val); 
     setAlertMessage('')
+  }
+
+  const updateEmail = e => {
+    setEmail(e.target.value); 
+    setAlertMessage('');
+  }
+
+  const updatePassword = e => {
+    setPassword(e.target.value); 
+    setAlertMessage('');
   }
 
   const signupForm = () => {
@@ -80,11 +109,11 @@ function Login() {
             </FormControl>
             <FormControl isRequired>
               <FormLabel htmlFor="email">Email</FormLabel>
-              <Input id="email" type="email" onChange={(e) =>{setEmail(e.target.value); setAlertMessage('')}}/>
+              <Input id="email" type="email" onChange={updateEmail}/>
             </FormControl>
             <FormControl isRequired>
               <FormLabel htmlFor="password">Password</FormLabel>
-              <Input id="password" type="password" value={password} onChange={(e) =>{setPassword(e.target.value); setAlertMessage('')}} />
+              <Input id="password" type="password" value={password} onChange={updatePassword} />
               <FormHelperText color="muted">Strong password required</FormHelperText>
             </FormControl>
           </Stack>
