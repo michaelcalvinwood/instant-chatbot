@@ -32,7 +32,7 @@ function Home() {
             Questions? Our chatbot will be happy to assist you. Just click the "Instant Chatbot AI" in the bottom-right corner.
         </Text>
         <Link to="./login?signup=gs">
-            <Button display="block" margin="1rem auto">Get Started</Button>
+            <Button display="block" margin="1rem auto" variant="primary">Get Started</Button>
         </Link>
         
          
