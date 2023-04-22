@@ -27,15 +27,12 @@ import isEmail from 'validator/lib/isEmail';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-function Login() {
-
+function Login(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userName, setUserName] = useState('');
   const [alertType, setAlertType] = useState('error');
   const [alertMessage, setAlertMessage] = useState('')
-
-  console.log('render Login', userName, password, email);
 
   const showAlert = (type, message) => {
     setAlertType(type);
@@ -55,8 +52,20 @@ function Login() {
     }
 
     axios(request)
-    .then(response => alert('logged in'))
-    .catch(err => showAlert('error', `Unable to login with these credentials.`))
+    .then(response => {
+      const info = response.data;
+      console.log('info', info)
+      props.setUserName(info.userName);
+      props.setStorageTokens(info.storageTokens);
+      props.setQueryTokens(info.queryStorage);
+      props.setHasKey(info.hasKey);
+      props.setToken(info.token);
+      window.location.href = '/dashboard';
+    })
+    .catch(err => {
+      console.error(err);
+      showAlert('error', `Unable to login with these credentials.`)
+    })
   }
 
   const login = () => {

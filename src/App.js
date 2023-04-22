@@ -14,7 +14,11 @@ import Create from './pages/Create';
 import { useState } from 'react';
 import Signup from './pages/Signup';
 function App() {
-
+  const [storageTokens, setStorageTokens] = useState(0);
+  const [queryTokens, setQueryTokens] = useState(0);
+  const [hasKey, setHasKey] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [token, setToken] = useState(null);
 
   return (
     <Box backgroundColor='white' height="100vh">
@@ -22,7 +26,17 @@ function App() {
         <Header/>
         <Routes>
           <Route path="/" element={<Home />}/>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" 
+            element={
+              <Login 
+                setUserName={setUserName}
+                setStorageTokens={setStorageTokens}
+                setQueryTokens={setQueryTokens}
+                setHasKey={setHasKey}
+                setToken={setToken}
+              />
+            } 
+          />
           <Route path="/signup" element={<Signup />} />
           <Route path="/purchase" element={<Purchase />} />
           <Route path="/dashboard" element={<Dashboard />} />
