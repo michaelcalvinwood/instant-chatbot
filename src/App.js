@@ -13,6 +13,7 @@ import FAQ from './pages/FAQ';
 import Create from './pages/Create';
 import { useState } from 'react';
 import Signup from './pages/Signup';
+import Account from './pages/Account';
 function App() {
   const [storageTokens, setStorageTokens] = useState(0);
   const [queryTokens, setQueryTokens] = useState(0);
@@ -65,10 +66,14 @@ function App() {
                 userName={userName}
                 storageTokens={storageTokens}
                 queryTokens={queryTokens}
+                hasKey={hasKey}
+                setHasKey={setHasKey}
+                setToken={setToken}
               />
             } 
           
           />
+          <Route path="/account" element={<Account userName={userName}/>} />
           
         </Routes>
       

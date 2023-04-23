@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as qs from 'qs';
 import {
   Button,
@@ -29,6 +29,10 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
 function Login(props) {
+
+
+
+
   const {userName, setUserName} = props;
   console.log('Login', userName);
   
@@ -36,8 +40,15 @@ function Login(props) {
   const [password, setPassword] = useState('');
   const [alertType, setAlertType] = useState('error');
   const [alertMessage, setAlertMessage] = useState('');
+
+  const propsRef = useRef();
+  propsRef.current = props;
+
+  console.log('propsRef', propsRef.current);
  
-  let history = useNavigate();
+  let navigate = useNavigate();
+  let loaded = false;
+  if (window.location.pathname !== '/login') window.location.href = '/login';
 
   const showAlert = (type, message) => {
     setAlertType(type);
@@ -53,7 +64,7 @@ function Login(props) {
     props.setQueryTokens(info.queryTokens);
     props.setHasKey(info.hasKey);
     props.setToken(info.token);
-    history('/dashboard');
+    navigate('/dashboard');
   }
 
   const loginToAccount = () => {
@@ -84,10 +95,11 @@ function Login(props) {
   }
 
   const updateUserName = e => {
-    console.log('updateUserName');
+    console.log('updateUserName', loaded, propsRef);
+    
     const val = e.target.value;
     var regex = new RegExp(/^[A-Za-z][A-Za-z0-9\-]*$/gm);
-    if (regex.test(val)) setUserName(val); 
+    if (regex.test(val)) propsRef.current.setUserName(val); 
     setAlertMessage('')
   }
 
@@ -100,7 +112,9 @@ function Login(props) {
   const query = qs.parse(window.location.search.substring(1));
   
   
-
+  useEffect(() => {
+    loaded = true;
+  })
   return (
     <Container>
       <Heading textAlign="center">Login</Heading>

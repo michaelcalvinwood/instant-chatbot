@@ -10,12 +10,13 @@ function Home() {
         </Heading>
         <Text paddingTop=".75rem">
           In less than five minutes, you can:
+        </Text>
           <UnorderedList paddingLeft="1rem">
             <ListItem> <strong>Create a chatbot:</strong> To be displayed on as many websites as you want.</ListItem>
             <ListItem><strong>Load your content:</strong> Including PDFs, Word Documents, webpages, or even entire websites.</ListItem>
             <ListItem><strong>Deploy it to your website:</strong> Using only two lines of code.</ListItem>
           </UnorderedList>
-        </Text>
+   
         <Text paddingTop=".75rem">
         You can even create <strong>different chatbots for different webpages</strong>. For example:
         <UnorderedList paddingLeft='1rem'>

@@ -1,10 +1,12 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react'
-import { Box, Container, Heading, FormControl, FormLabel, Input, Stack, Text, Flex, Select, Button, Textarea, Alert, AlertIcon } from '@chakra-ui/react'
+import { Box, Container, Heading, FormControl, FormLabel, Input, Stack, Text, Flex, Select, Button, Textarea, Alert, AlertIcon, UnorderedList, ListItem } from '@chakra-ui/react'
 import {useDropzone} from 'react-dropzone'
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 //import {uuid as uuidv4} from 'uuid';
 
-function Create({storageTokens, queryTokens, userName}) {
+function Create({storageTokens, queryTokens, userName, hasKey, setHasKey, setToken}) {
     const [contentType, setContentType] = useState('pdf');
     const [websites, _setWebsites] = useState('');
     const [botId, setBotId] = useState('');
@@ -68,6 +70,37 @@ function Create({storageTokens, queryTokens, userName}) {
 
     }
 
+    const setOpenAIKey = async () => {
+        
+        // test the key
+        let request = {
+            url: `https://api.openai.com/v1/moderations`,
+            method: 'post',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${openAIKeys[0]}`
+            },
+            data: {
+                input: 'Who is Julio Iglesius?'
+            }
+        }
+        let response;
+
+        try {
+            response = await axios(request);
+        } catch (err) {
+            setAlertStatus('error');
+            setAlertMessage('Could not validate your OpenAI Key. Please make sure that it is correct.');
+            return;
+        }
+
+        console.log(response.data);
+
+        // if key works then update config database
+
+        // update local token and hasKey
+    }
+
     const onDrop = useCallback( async acceptedFiles => {
         if (!openAIKeysRef.current.length) {
             setAlertStatus('error');
@@ -106,6 +139,41 @@ function Create({storageTokens, queryTokens, userName}) {
     useEffect(() => {
        
     })
+
+    if (!hasKey) {
+        return (
+            <Container backgroundColor='white'>
+                <Heading as='h1' textAlign="center">Create Bot</Heading>
+                <Heading as='h2' size='md' color='navy' textAlign='center'>OpenAI Key Needed</Heading>
+                <Alert status={alertStatus} marginBottom={'0'} visibility={alertStatus && alertMessage ? 'visible' : 'hidden'}>
+                    <AlertIcon />
+                        {alertMessage}
+                    </Alert>
+                <Text>The Instant Chatbot service requires each customer to provide their own OpenAI Key for savings, security, and stability.</Text>
+                <UnorderedList paddingLeft="1rem">
+                    <ListItem>
+                        <strong>Savings:</strong> Our service converts your content into neurological strands to be stored in our neural network. When your visitors ask questions, our servers find the matching information on the neural network and serve that information to OpenAI so that it can provide a response. Therefore, you only pay us for storing your content in our neural network, and pay for the queries used to extract information from our neural network. With this model, many companies can run state-of-the-art chatbots for under $20/month (including OpenAI fees).</ListItem>
+                    <ListItem> <strong>Security:</strong> If another customer makes unallowed requests (such as hate speech), OpenAI will terminate their access. In this case, only their API key is terminated. Your access remains secure.
+                    </ListItem>
+                    <ListItem><strong>Stability:</strong> OpenAI limits the rate at which each API key can access their service. By providing your own key, your access cannot be reduced by another customer's excessive traffic.</ListItem>
+                </UnorderedList>
+                <Text>You can <Link to="https://platform.openai.com/signup" target="_blank"><span style={{color: 'navy', textDecoration: 'underline'}}>get an OpenAI key for free</span>.</Link> OpenAI also gifts an initial credit so that you can starting using the service free of charge as well.</Text>
+                <FormControl>
+                    <Text marginTop='1.25rem' textAlign='center'>
+                        <strong>Your OpenAI Key</strong>
+                    </Text>
+                    <Input id="medium" size="md" placeholder=" " data-peer width='35rem' display='block' margin='.25rem auto' 
+                        onChange={(e) => {
+                            setAlertMessage('');
+                            setOpenAiKeys([`${e.target.value}`])
+                        }}
+                            
+                    />
+            </FormControl>
+            <Button display="block" margin="1rem auto" variant="primary" onClick={setOpenAIKey}>Submit</Button>
+            </Container>
+        )
+    }
 
   return (
     

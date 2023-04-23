@@ -79,9 +79,9 @@ export const Header = ({userName}) => {
             {isDesktop ? (
               <HStack spacing="4">
                 <ButtonGroup variant="ghost" spacing="1">
-                  <IconButton icon={<FiSearch fontSize="1.25rem" />} aria-label="Search" />
-                        <Link to='./settings'><IconButton icon={<FiSettings fontSize="1.25rem" />} aria-label="Settings" /></Link>
-                        <Link to='./faq'><IconButton icon={<FiHelpCircle fontSize="1.25rem" />} aria-label="Help Center" /></Link>
+                  {/* <IconButton icon={<FiSearch fontSize="1.25rem" />} aria-label="Search" /> */}
+                  <Link to={userName ? '/account' : '/login'}><IconButton icon={<FiSettings fontSize="1.25rem" />} aria-label="Settings" /></Link>
+                  {/* <Link to='./faq'><IconButton icon={<FiHelpCircle fontSize="1.25rem" />} aria-label="Help Center" /></Link> */}
                 </ButtonGroup>
               </HStack>
             ) : (
