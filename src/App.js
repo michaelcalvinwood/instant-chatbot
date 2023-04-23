@@ -67,6 +67,7 @@ function App() {
                 storageTokens={storageTokens}
                 queryTokens={queryTokens}
                 hasKey={hasKey}
+                token={token}
                 setHasKey={setHasKey}
                 setToken={setToken}
               />

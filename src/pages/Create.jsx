@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 //import {uuid as uuidv4} from 'uuid';
 
-function Create({storageTokens, queryTokens, userName, hasKey, setHasKey, setToken}) {
+function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey, setToken}) {
     const [contentType, setContentType] = useState('pdf');
     const [websites, _setWebsites] = useState('');
     const [botId, setBotId] = useState('');
@@ -71,6 +71,10 @@ function Create({storageTokens, queryTokens, userName, hasKey, setHasKey, setTok
     }
 
     const setOpenAIKey = async () => {
+        const debug = true;
+
+        if (!openAIKeys.length || !openAIKeys[0]) return;
+        setAlertMessage('');
         
         // test the key
         let request = {
@@ -87,14 +91,31 @@ function Create({storageTokens, queryTokens, userName, hasKey, setHasKey, setTok
         let response;
 
         try {
-            response = await axios(request);
+            if (!debug) {
+                response = await axios(request);
+                console.log(response.data);
+            }
         } catch (err) {
             setAlertStatus('error');
             setAlertMessage('Could not validate your OpenAI Key. Please make sure that it is correct.');
             return;
         }
 
-        console.log(response.data);
+        request = {
+            url: `https://admin.instantchatbot.net:6200/key`,
+            method: 'post',
+            data: {
+                token, key: openAIKeys[0]
+            }
+        }
+
+        try {
+            response = await axios(request);
+        } catch (err) {
+            setAlertStatus('error');
+            setAlertMessage('Database Error: Could not store OpenAI Key. Please try again later.');
+            return;
+        }
 
         // if key works then update config database
 
@@ -153,11 +174,11 @@ function Create({storageTokens, queryTokens, userName, hasKey, setHasKey, setTok
                 <UnorderedList paddingLeft="1rem">
                     <ListItem>
                         <strong>Savings:</strong> Our service converts your content into neurological strands to be stored in our neural network. When your visitors ask questions, our servers find the matching information on the neural network and serve that information to OpenAI so that it can provide a response. Therefore, you only pay us for storing your content in our neural network, and pay for the queries used to extract information from our neural network. With this model, many companies can run state-of-the-art chatbots for under $20/month (including OpenAI fees).</ListItem>
-                    <ListItem> <strong>Security:</strong> If another customer makes unallowed requests (such as hate speech), OpenAI will terminate their access. In this case, only their API key is terminated. Your access remains secure.
+                    <ListItem> <strong>Security:</strong> If another customer makes unallowed requests (such as hate speech), OpenAI will terminate their access. In this case, only their API key is terminated. Your access remains secure. Please note that we have safeguards to protect your API key from being used for unallowed requests. Providing your own API key protects you against another company who disables our safeguards.
                     </ListItem>
                     <ListItem><strong>Stability:</strong> OpenAI limits the rate at which each API key can access their service. By providing your own key, your access cannot be reduced by another customer's excessive traffic.</ListItem>
                 </UnorderedList>
-                <Text>You can <Link to="https://platform.openai.com/signup" target="_blank"><span style={{color: 'navy', textDecoration: 'underline'}}>get an OpenAI key for free</span>.</Link> OpenAI also gifts an initial credit so that you can starting using the service free of charge as well.</Text>
+                <Text>You can <Link to="https://platform.openai.com/signup" target="_blank"><span style={{color: 'navy', textDecoration: 'underline'}}>get an OpenAI key for free</span>.</Link> OpenAI also gifts an initial credit so that you can starting using their service free of charge as well.</Text>
                 <FormControl>
                     <Text marginTop='1.25rem' textAlign='center'>
                         <strong>Your OpenAI Key</strong>
