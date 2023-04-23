@@ -15,6 +15,9 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const [alertStatus, setAlertStatus] = useState('success');
     const [alertMessage, setAlertMessage] = useState('');
     const [dataAdded, setDataAdded] = useState(false);
+    const [deployable, setDeployable] = useState(false);
+    const [botName, setBotName] = useState('');
+    const [infoUploaded, setInfoUploaded] = useState(false);
 
     //console.log('openAIKeys', openAIKeys, websites);
 
@@ -117,15 +120,15 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             return;
         }
 
-        // if key works then update config database
-
-        // update local token and hasKey
+        const info = response.data;
+        setToken(info.token);
+        setHasKey(true);
     }
 
     const onDrop = useCallback( async acceptedFiles => {
-        if (!openAIKeysRef.current.length) {
+        if (!botName) {
             setAlertStatus('error');
-            setAlertMessage('Please enter OpenAI Key before uploading files.');
+            setAlertMessage('Please enter a name for your bot before uploading files.');
             return;
         }
 
@@ -151,6 +154,25 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         // await submit file to assigned ingestor
         // report ingestor message
 
+        let request = {
+            url: 'https://admin.instantchatbot.net/newBot',
+            method: 'post',
+            data: {
+                token
+            }
+        }
+
+        let result;
+
+        try {
+            result = await axios(request)
+        } catch (err) {
+            console.error(err);
+            setAlertStatus('error');
+            setAlertMessage('Server error. Unable to assign new bot. Please try again later.');
+            return;
+        }
+
         console.log('files', acceptedFiles);
 
         if (!botId) setBotId(workingBotId);
@@ -158,7 +180,9 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
     useEffect(() => {
-       
+       if (!botName || !websites || !infoUploaded) {
+         if (deployable !== false) setDeployable(false);
+       }
     })
 
     if (!hasKey) {
@@ -221,10 +245,10 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                 <Text>
                     Give your bot a name:
                 </Text>
-                <Input id="medium" size="md" placeholder=" " data-peer 
+                <Input id="medium" size="md" placeholder=" " data-peer  value={botName}
                     onChange={(e) => {
                         setAlertMessage('');
-                        setOpenAiKeys([`${e.target.value}`])
+                        setBotName(e.target.value)
                         updateBotConfig();
                     }}
                         
@@ -254,7 +278,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                     }
                 </div>
             </Box>
-            <Button marginTop='32px' onClick={handleDeployment}>Deploy</Button>
+            <Button  onClick={handleDeployment}  display="block" margin="1rem auto" variant="primary" width="7rem" visibility={deployable ? 'visible' : 'hidden'}>Deploy</Button>
            
         </Flex>
         </Container>
