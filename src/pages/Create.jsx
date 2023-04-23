@@ -16,13 +16,14 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const [alertMessage, setAlertMessage] = useState('');
     const [dataAdded, setDataAdded] = useState(false);
     const [deployable, setDeployable] = useState(false);
-    const [botName, setBotName] = useState('');
+    const [botName, _setBotName] = useState('');
     const [infoUploaded, setInfoUploaded] = useState(false);
 
     //console.log('openAIKeys', openAIKeys, websites);
 
     const openAIKeysRef = useRef('');
     const websitesRef = useRef('');
+    const botNameRef = useRef('');
 
     const setOpenAiKeys = value => {
         openAIKeysRef.current = value;
@@ -32,6 +33,11 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const setWebsites = value => {
         websitesRef.current = value;
         _setWebsites(value);
+    }
+
+    const setBotName = value => {
+        botNameRef.current = value;
+        _setBotName(value);
     }
 
     function bytesToSize() {
@@ -126,7 +132,9 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     }
 
     const onDrop = useCallback( async acceptedFiles => {
-        if (!botName) {
+        setAlertMessage('');
+
+        if (!botNameRef.current) {
             setAlertStatus('error');
             setAlertMessage('Please enter a name for your bot before uploading files.');
             return;
@@ -155,10 +163,12 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         // report ingestor message
 
         let request = {
-            url: 'https://admin.instantchatbot.net/newBot',
+            url: 'https://admin.instantchatbot.net:6200/newBot',
             method: 'post',
             data: {
-                token
+                token,
+                botName: botNameRef.current,
+                websites: websitesRef.current
             }
         }
 
@@ -172,6 +182,10 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             setAlertMessage('Server error. Unable to assign new bot. Please try again later.');
             return;
         }
+
+        const {botToken, ingest} = result.data;
+
+        console.log('upload files to', ingest);
 
         console.log('files', acceptedFiles);
 
