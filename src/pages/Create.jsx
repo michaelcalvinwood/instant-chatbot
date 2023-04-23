@@ -4,7 +4,7 @@ import { Box, Container, Heading, FormControl, FormLabel, Input, Stack, Text, Fl
 import {useDropzone} from 'react-dropzone'
 //import {uuid as uuidv4} from 'uuid';
 
-function Create({accountId}) {
+function Create({storageTokens, queryTokens, userName}) {
     const [contentType, setContentType] = useState('pdf');
     const [websites, _setWebsites] = useState('');
     const [botId, setBotId] = useState('');
@@ -44,7 +44,7 @@ function Create({accountId}) {
     const updateBotConfig = () => {
         if (!dataAdded) return;
 
-        console.log('update bot config at config.instantchatbot.net', openAIKeysRef.current, websitesRef.current, accountId);
+        console.log('update bot config at config.instantchatbot.net', openAIKeysRef.current, websitesRef.current);
 
     }
 
@@ -62,7 +62,7 @@ function Create({accountId}) {
             url: '',
             method: 'post',
             data: {
-                ingestServer, qdrantServer, appServer, botId, openAIKeys, websites, accountId
+                ingestServer, qdrantServer, appServer, botId, openAIKeys, websites, userName
             }
         }
 
@@ -111,7 +111,11 @@ function Create({accountId}) {
     
     <Container backgroundColor='white'>
         <Heading as='h1' textAlign="center">Create Bot</Heading>
-        <Heading as='h2' size='xs' textAlign='center'>{bytesToSize()}</Heading>
+        
+        <Box color="navy" display='flex' justifyContent={'space-between'}>
+            <Text>Query Tokens: {queryTokens.toLocaleString("en-US")}   </Text>
+            <Text>Storage Tokens: {storageTokens.toLocaleString("en-US")} </Text>
+        </Box>
             <Box
             as="section"
             bg="bg-surface"
@@ -126,7 +130,7 @@ function Create({accountId}) {
         <Flex flexDirection={'column'}>
             <FormControl>
                 <Text>
-                    OpenAI API Key
+                    Give your bot a name:
                 </Text>
                 <Input id="medium" size="md" placeholder=" " data-peer 
                     onChange={(e) => {
@@ -137,7 +141,7 @@ function Create({accountId}) {
                         
                 />
             </FormControl>
-            <Text marginTop="24px">Websites</Text>
+            <Text marginTop="24px">Websites (e.g. example.com, www.example.com):</Text>
             <Textarea value={websites}  color='black' 
                 onChange={(e) => {
                     setAlertMessage('');
@@ -147,7 +151,7 @@ function Create({accountId}) {
                   
             />
 
-            <Text marginTop="24px">Content</Text>
+            <Text marginTop="24px">Load Content:</Text>
             <Select value={contentType} onChange={(e) => console.log(setContentType(e.target.value))}>
                 <option value='pdf'>PDF</option>
                 <option value='scanned'>Scanned PDF</option>

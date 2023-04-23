@@ -50,7 +50,7 @@ function Login(props) {
     console.log(info.userName);
     props.setUserName(info.userName);
     props.setStorageTokens(info.storageTokens);
-    props.setQueryTokens(info.queryStorage);
+    props.setQueryTokens(info.queryTokens);
     props.setHasKey(info.hasKey);
     props.setToken(info.token);
     history('/dashboard');

@@ -20,7 +20,7 @@ function App() {
   const [userName, setUserName] = useState('');
   const [token, setToken] = useState(null);
 
-  console.log('App', userName);
+  console.log('App', userName, queryTokens, typeof queryTokens);
 
   return (
     <Box backgroundColor='white' height="100vh">
@@ -59,7 +59,16 @@ function App() {
           <Route path="/chatbot" element={<ChatBot />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/faq" element={<FAQ />} />
-          <Route path="/create" element={<Create />} />
+          <Route path="/create" 
+            element={ !userName ? <Login /> :
+              <Create 
+                userName={userName}
+                storageTokens={storageTokens}
+                queryTokens={queryTokens}
+              />
+            } 
+          
+          />
           
         </Routes>
       
