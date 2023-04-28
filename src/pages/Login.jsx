@@ -34,7 +34,7 @@ function Login(props) {
 
 
   const {userName, setUserName} = props;
-  console.log('Login', userName);
+
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,8 +43,6 @@ function Login(props) {
 
   const propsRef = useRef();
   propsRef.current = props;
-
-  console.log('propsRef', propsRef.current);
  
   let navigate = useNavigate();
   let loaded = false;

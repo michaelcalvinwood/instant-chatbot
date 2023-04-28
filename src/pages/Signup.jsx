@@ -35,8 +35,6 @@ function Signup() {
   const [alertType, setAlertType] = useState('error');
   const [alertMessage, setAlertMessage] = useState('')
 
-  console.log('render Login', userName, password, email);
-
   const showAlert = (type, message) => {
     setAlertType(type);
     setAlertMessage(message);

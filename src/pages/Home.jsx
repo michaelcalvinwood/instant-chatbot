@@ -32,7 +32,7 @@ function Home() {
         <Text paddingTop=".75rem">
             Questions? Our chatbot will be happy to assist you. Just click the "Instant Chatbot AI" in the bottom-right corner.
         </Text>
-        <Link to="./login?signup=gs">
+        <Link to="./signup">
             <Button display="block" margin="1rem auto" variant="primary">Get Started</Button>
         </Link>
         

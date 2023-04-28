@@ -158,10 +158,6 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             
         } else workingBotId = botId;
 
-        // get assigned ingestor
-        // await submit file to assigned ingestor
-        // report ingestor message
-
         let request = {
             url: 'https://admin.instantchatbot.net:6200/newBot',
             method: 'post',
@@ -172,10 +168,10 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             }
         }
 
-        let result;
+        let response;
 
         try {
-            result = await axios(request)
+            response = await axios(request)
         } catch (err) {
             console.error(err);
             setAlertStatus('error');
@@ -183,11 +179,41 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             return;
         }
 
-        const {botToken, ingest} = result.data;
+        const {botToken, serverSeries} = response.data;
 
-        console.log('upload files to', ingest);
-
+        console.log(`upload files to: https://ingest-${serverSeries}.instantchatbot.net`);
         console.log('files', acceptedFiles);
+
+
+        // Get post signed url (or put signed url) from ingest server
+
+        // upload file directly to s3 bucket /botId/fileId.ext
+
+        // alert ingest to the newly uploaded file.
+
+        return;
+
+        const files = acceptedFiles;
+
+        const fd = new FormData();
+        files.forEach(file =>fd.append('File[]',file));
+
+        request = {
+            url: `https://ingest-${serverSeries}.instantchatbot.net:6201/fileUpload?bt=${botToken}`,
+            method: 'post',
+            data: fd,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }
+    
+        try {
+            response = await axios(request);
+        } catch (err) {
+            return console.error(err);
+        }
+    
+        for (let i = 0; i < files.length; ++i) {
+            console.log(`Uploaded: ${files[i].name}`);
+        }
 
         if (!botId) setBotId(workingBotId);
       }, [])
