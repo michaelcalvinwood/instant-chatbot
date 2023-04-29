@@ -179,13 +179,49 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             return;
         }
 
-        const {botToken, serverSeries} = response.data;
+        const {botToken, serverSeries, botId} = response.data;
 
         console.log(`upload files to: https://ingest-${serverSeries}.instantchatbot.net`);
-        console.log('files', acceptedFiles);
+        console.log('files', acceptedFiles[0].name, acceptedFiles);
 
+        request = {
+            url: `https://ingest-${serverSeries}.instantchatbot.net:6201/presignedUrl?bt=${botToken}`,
+            method: 'post',
+            data: {
+                fileName: acceptedFiles[0].name
+            }
+        }
 
-        // Get post signed url (or put signed url) from ingest server
+        try {
+            response = await axios(request);
+        } catch(err) {
+            console.error(err);
+            setAlertStatus('error');
+            setAlertMessage('Server error. Unable to get authorization to upload file. Please try again later');
+            return;
+        }
+
+        const url = response.data;
+
+     var file = acceptedFiles[0];
+       
+      var options = {
+        headers: {
+          'Content-Type': file.type,
+          'x-amz-acl': 'public-read'
+            }
+        };
+
+        try {
+            response = axios.put(url, file, options);
+        }
+        catch(err) {
+            console.log(err);
+        }
+
+    console.log(response.data);
+
+        return;
 
         // upload file directly to s3 bucket /botId/fileId.ext
 
