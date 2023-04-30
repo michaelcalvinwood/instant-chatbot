@@ -18,7 +18,7 @@ function Home() {
           </UnorderedList>
    
         <Text paddingTop=".75rem">
-        You can even create <strong>different chatbots for different webpages</strong>. For example:
+        You can even create <strong>different chatbots for different webpages</strong>. Example webpages include:
         <UnorderedList paddingLeft='1rem'>
           <ListItem><strong>About:</strong> Display a chatbot loaded with your company information (such as contact information).</ListItem>
           <ListItem><strong>Support:</strong> Display a chatbot loaded with your support documents and FAQs to provide your customers instant, intelligent answers to their questions.
