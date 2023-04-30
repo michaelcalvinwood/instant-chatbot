@@ -4,7 +4,7 @@ import { Box, Container, Heading, FormControl, FormLabel, Input, Stack, Text, Fl
 import {useDropzone} from 'react-dropzone'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-//import {uuid as uuidv4} from 'uuid';
+import {uuid as uuidv4} from 'uuid';
 
 function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey, setToken}) {
     const [contentType, setContentType] = useState('pdf');
@@ -152,12 +152,6 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             return;
         }
 
-        console.log('file type', acceptedFiles[0].type);
-
-        /*
-         * TODO: Validate that file is an accepted type here
-         */
-
         let workingBotId;
 
         if (!dataAdded) {
@@ -196,7 +190,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             url: `https://ingest-${serverSeries}.instantchatbot.net:6201/presignedUrl?bt=${botToken}`,
             method: 'post',
             data: {
-                fileName: acceptedFiles[0].name
+                fileName: `${uuidv4()}--${acceptedFiles[0].name.replaceAll('--', '-')}`
             }
         }
 
