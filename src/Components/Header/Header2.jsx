@@ -20,7 +20,6 @@ import * as qs from 'qs';
 export const Header = ({userName}) => {
   let location = useLocation();
   let {pathname} = location;
-  console.log(location)
 
   let login = false;
   let signup = false;
@@ -32,7 +31,7 @@ export const Header = ({userName}) => {
     else login = true;
   }
 
-  console.log('signup, login', signup, login);
+
 
   const isDesktop = useBreakpointValue({
     base: false,

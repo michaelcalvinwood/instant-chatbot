@@ -146,6 +146,14 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             return;
         }
 
+        if (contentType === 'pdf' && acceptedFiles[0].type !== 'application/pdf') {
+            setAlertStatus('error');
+            setAlertMessage('Please submit a PDF file.');
+            return;
+        }
+
+        console.log('file type', acceptedFiles[0].type);
+
         /*
          * TODO: Validate that file is an accepted type here
          */
