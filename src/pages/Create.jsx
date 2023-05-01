@@ -1,10 +1,10 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react'
-import { Box, Container, Heading, FormControl, FormLabel, Input, Stack, Text, Flex, Select, Button, Textarea, Alert, AlertIcon, UnorderedList, ListItem } from '@chakra-ui/react'
+import { Box, Container, Heading, FormControl, FormLabel, Input, Stack, Text, Flex, Select, Button, Textarea, Alert, AlertIcon, UnorderedList, ListItem, Spinner } from '@chakra-ui/react'
 import {useDropzone} from 'react-dropzone'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {uuid as uuidv4} from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey, setToken}) {
     const [contentType, setContentType] = useState('pdf');
@@ -18,6 +18,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const [deployable, setDeployable] = useState(false);
     const [botName, _setBotName] = useState('');
     const [infoUploaded, setInfoUploaded] = useState(false);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     //console.log('openAIKeys', openAIKeys, websites);
 
@@ -152,13 +153,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             return;
         }
 
-        let workingBotId;
-
-        if (!dataAdded) {
-            //workingBotId = uuidv4();
-            // await setConfig()
-            
-        } else workingBotId = botId;
+        setShowSpinner(true);
 
         let request = {
             url: 'https://admin.instantchatbot.net:6200/newBot',
@@ -178,19 +173,24 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             console.error(err);
             setAlertStatus('error');
             setAlertMessage('Server error. Unable to assign new bot. Please try again later.');
+            setShowSpinner(false);
             return;
         }
 
-        const {botToken, serverSeries, botId} = response.data;
+        const {botToken, serverSeries} = response.data;
+        const theBotId = response.data.botId;
+      
 
         console.log(`upload files to: https://ingest-${serverSeries}.instantchatbot.net`);
         console.log('files', acceptedFiles[0].name, acceptedFiles);
+
+        const newFileName =  `${uuidv4()}--${acceptedFiles[0].name.replaceAll('--', '-')}`;
 
         request = {
             url: `https://ingest-${serverSeries}.instantchatbot.net:6201/presignedUrl?bt=${botToken}`,
             method: 'post',
             data: {
-                fileName: `${uuidv4()}--${acceptedFiles[0].name.replaceAll('--', '-')}`
+                fileName: newFileName
             }
         }
 
@@ -200,61 +200,57 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             console.error(err);
             setAlertStatus('error');
             setAlertMessage('Server error. Unable to get authorization to upload file. Please try again later');
+            setShowSpinner(false);
             return;
         }
 
         const url = response.data;
 
-     var file = acceptedFiles[0];
-       
-      var options = {
-        headers: {
-          'Content-Type': file.type,
-          'x-amz-acl': 'public-read'
+        var file = acceptedFiles[0];
+        
+        var options = {
+            headers: {
+            'Content-Type': file.type,
+            'x-amz-acl': 'public-read'
+                }
+            };
+
+            try {
+                response = await axios.put(url, file, options);
             }
-        };
-
-        try {
-            response = axios.put(url, file, options);
-        }
-        catch(err) {
-            console.log(err);
-        }
-
-    console.log(response.data);
-
-        return;
-
-        // upload file directly to s3 bucket /botId/fileId.ext
-
-        // alert ingest to the newly uploaded file.
-
-        return;
-
-        const files = acceptedFiles;
-
-        const fd = new FormData();
-        files.forEach(file =>fd.append('File[]',file));
+            catch(err) {
+                console.error(err);
+                setAlertStatus('error');
+                setAlertMessage('Server error. Unable to upload pdf. Please try again later.');
+                setShowSpinner(false);
+                return;
+            }
+        
+        console.log('url',url);
 
         request = {
-            url: `https://ingest-${serverSeries}.instantchatbot.net:6201/fileUpload?bt=${botToken}`,
+            url: `https://ingest-${serverSeries}.instantchatbot.net:6201/ingestS3Pdf?bt=${botToken}`,
             method: 'post',
-            data: fd,
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }
-    
-        try {
-            response = await axios(request);
-        } catch (err) {
-            return console.error(err);
-        }
-    
-        for (let i = 0; i < files.length; ++i) {
-            console.log(`Uploaded: ${files[i].name}`);
+            data: {
+                url: `https://instantchatbot.nyc3.digitaloceanspaces.com/${theBotId}/${newFileName}`
+            }
         }
 
-        if (!botId) setBotId(workingBotId);
-      }, [])
+        try {
+            response = await axios(request);
+        } catch(err) {
+            console.error(err);
+            setAlertStatus('error');
+            setAlertMessage('Server error. Unable to process pdf. Please try again later.');
+            setShowSpinner(false);
+            return;
+        }
+
+        setShowSpinner(false);
+        setBotId(theBotId);
+
+        return;
+      })
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
     useEffect(() => {
@@ -307,7 +303,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             <Text>Query Tokens: {queryTokens.toLocaleString("en-US")}   </Text>
             <Text>Storage Tokens: {storageTokens.toLocaleString("en-US")} </Text>
         </Box>
-            <Box
+        <Box
             as="section"
             bg="bg-surface"
             pt="8"
@@ -318,7 +314,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
              {alertMessage}
         </Alert>
         <Container maxW="lg">
-        <Flex flexDirection={'column'}>
+        { !botId && <Flex flexDirection={'column'}>
             <FormControl>
                 <Text>
                     Give your bot a name:
@@ -356,12 +352,20 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                     }
                 </div>
             </Box>
-            <Button  onClick={handleDeployment}  display="block" margin="1rem auto" variant="primary" width="7rem" visibility={deployable ? 'visible' : 'hidden'}>Deploy</Button>
-           
-        </Flex>
+        </Flex> }
+        {botId && <Box border='1px solid navy' borderRadius='8px' padding='.25rem 1rem'>       
+            <Text marginTop="12px" textAlign={'center'} fontWeight={'bold'}>head</Text>
+            <Text marginBottom="6px">{`<link rel="stylesheet" href="https://instantchatbot.net/bot/${botId}/instantchatbot.css?v=1">`}</Text>
+            <Text textAlign={'center'} fontWeight={'bold'}>body</Text>
+            <Text>{`<script src="https://instantchatbot.net/bot/${botId}/instantchatbot.js?v=1"><script>`}</Text>
+        </Box>}
         </Container>
     </Box>
+    {showSpinner && <Box height='100vh' width="100vw" position='fixed' top='0' left='0' display='flex' justifyContent={'center'} alignItems={'center'}>
+        <Spinner size='xl' color='navy'/>
+    </Box> }
     </Container>
+    
 
   )
 }
