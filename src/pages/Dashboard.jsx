@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Button, Container, Heading } from '@chakra-ui/react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import BotCard from '../Components/BotCard';
 
 function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
   console.log('Dashboard', userName);
   const navigate = useNavigate();
+  const [bots, setBots] = useState([]);
+
 
 
   const getBots = async () => {
@@ -27,6 +30,7 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
     }
 
     console.log(response.data);
+    setBots(response.data);
   }
 
   useEffect(() => {
@@ -46,7 +50,9 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
       </Heading>
       <Link to='/create'><Button margin="auto" display="block">Create New Bot</Button></Link>
       <Box>
-
+        {bots.map(bot => {
+          return <BotCard key={bot.botId} bot={bot} />
+        })}
       </Box>
     </Container>
   )

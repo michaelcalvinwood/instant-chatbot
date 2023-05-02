@@ -1,9 +1,9 @@
 import React from 'react'
 
-function BotCard({botName}) {
+function BotCard({bot}) {
   return (
     <div>
-        {botName}
+        {bot.botName}
     </div>
   )
 }
