@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+.bot-card:hover {
+  background-color: rgba(0, 0, 128, .25);
+  cursor: pointer;
+}
+
+.delete-icon {
+  filter: invert(13%) sepia(84%) saturate(6643%) hue-rotate(359deg) brightness(109%) contrast(114%);
+  cursor: pointer;
+}
+
+.edit-icon {
+  filter: invert(8%) sepia(89%) saturate(6853%) hue-rotate(246deg) brightness(61%) contrast(125%);
+  cursor: pointer;
+}
+
