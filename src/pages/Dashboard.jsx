@@ -9,6 +9,7 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
   console.log('Dashboard', userName);
   const navigate = useNavigate();
   const [bots, setBots] = useState([]);
+  const [editBot, setEditBot] = useState('');
 
   var arrayIsEqual = function(x, y) {
     return _(x).differenceWith(y, _.isEqual).isEmpty();
@@ -46,19 +47,19 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
     }
   })
   return (
-    <Container backgroundColor='white'>
-      <Heading textAlign="center" marginBottom='0px'>Dashboard</Heading>
-      <Heading as='h2' size='md' noOfLines={1} textAlign={'center'} marginTop='0' marginBottom='18px' color='navy'>
-        Bots
-      </Heading>
-      <Link to='/create'><Button margin="auto" display="block">Create New Bot</Button></Link>
-     
-      <Box display="flex" justifyContent={"space-between"} flexWrap="wrap" height="50vh" overflow={"auto"} padding=".5rem 1rem">
-        {bots.map(bot => {
-          return <BotCard key={bot.botId} bot={bot} userToken={token}/>
-        })}
-      </Box>
-    </Container>
+    <>    
+    {!editBot && <Container backgroundColor='white'>
+        <Heading textAlign="center" marginBottom='12px' color='navy'>Bots</Heading>
+        <Link to='/create' ><Button margin="0 auto 1rem auto" display="block">Create New Bot</Button></Link>
+      
+        <Box display="flex" justifyContent={"space-between"} flexWrap="wrap" height="60vh" overflow={"auto"} padding=".5rem 1rem" border='1px solid navy' borderRadius='8px'>
+          {bots.map(bot => {
+            return <BotCard key={bot.botId} bot={bot} userToken={token} setEditBot={setEditBot}/>
+          })}
+        </Box>
+      </Container> } 
+    </>
+
   )
 }
 
