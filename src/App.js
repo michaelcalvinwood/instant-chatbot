@@ -57,6 +57,18 @@ function App() {
             } 
           
           />
+          <Route path="/dashboard/:id" 
+            element={
+              <Dashboard 
+                userName={userName}
+                storageTokens={storageTokens}
+                queryTokens={queryTokens}
+                hasKey={hasKey}
+                token={token}
+              />
+            } 
+          
+          />
           <Route path="/chatbot" element={<ChatBot />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/faq" element={<FAQ />} />

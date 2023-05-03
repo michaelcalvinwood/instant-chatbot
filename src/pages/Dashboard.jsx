@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, Heading } from '@chakra-ui/react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Box, Button, Container, Heading, Image } from '@chakra-ui/react'
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import BotCard from '../Components/BotCard';
 import _ from 'lodash';
+import deleteIcon from '../assets/images/delete.svg';
 
 function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
   console.log('Dashboard', userName);
   const navigate = useNavigate();
   const [bots, setBots] = useState([]);
   const [editBot, setEditBot] = useState('');
+  const {id} = useParams();
+
+  const curBot = id && bots.length && bots.find(bot => bot.botId === id) ? bots.find(bot => bot.botId === id) : null;
+
+  console.log('curBot', curBot);
 
   var arrayIsEqual = function(x, y) {
     return _(x).differenceWith(y, _.isEqual).isEmpty();
   };
+
+
+  const deleteBot = () => {
+    console.log('deleteBot', editBot, token);
+
+  }
 
   const getBots = async () => {
     const request = {
@@ -48,7 +60,7 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
   })
   return (
     <>    
-    {!editBot && <Container backgroundColor='white'>
+    {!curBot && <Container backgroundColor='white'>
         <Heading textAlign="center" marginBottom='12px' color='navy'>Bots</Heading>
         <Link to='/create' ><Button margin="0 auto 1rem auto" display="block">Create New Bot</Button></Link>
       
@@ -57,7 +69,17 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
             return <BotCard key={bot.botId} bot={bot} userToken={token} setEditBot={setEditBot}/>
           })}
         </Box>
-      </Container> } 
+      </Container> 
+    }
+    {curBot && <Container backgroundColor='white'>
+      <Box position='relative'>
+        <Image className='delete-icon' src={deleteIcon} height="1.5rem" width="1.5rem" marginRight='-.25rem' position='absolute' right='.5rem' top='.5rem' onClick={() => deleteBot()}/>
+        <Heading textAlign="center" marginBottom='12px' color='navy'>{curBot.botName}</Heading>
+        <Link to='/create' ><Button margin="0 auto 1rem auto" display="block">Add Content</Button></Link>
+      </Box>
+     
+   
+      </Container> }  
     </>
 
   )
