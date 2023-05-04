@@ -66,11 +66,13 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
       response = await axios(request);
     } catch (err) {
       console.error(err);
+      setAlertStatus('error');
+      setAlertMessage('Could not delete bot. Please try again later.');
       return;
     }
 
     console.log(response.data);
-    
+    navigate('/dashboard'); 
   }
 
   useEffect(() => {
