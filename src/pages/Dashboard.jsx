@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, Heading, Image } from '@chakra-ui/react'
+import { Alert, AlertIcon, Box, Button, Container, Heading, Image } from '@chakra-ui/react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import BotCard from '../Components/BotCard';
@@ -12,6 +12,8 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
   const [bots, setBots] = useState([]);
   const [editBot, setEditBot] = useState('');
   const {id} = useParams();
+  const [alertStatus, setAlertStatus] = useState('success');
+  const [alertMessage, setAlertMessage] = useState('');
 
   const curBot = id && bots.length && bots.find(bot => bot.botId === id) ? bots.find(bot => bot.botId === id) : null;
 
@@ -22,10 +24,7 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
   };
 
 
-  const deleteBot = () => {
-    console.log('deleteBot', editBot, token);
-
-  }
+ 
 
   const getBots = async () => {
     const request = {
@@ -47,6 +46,31 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
 
     console.log(response.data);
     if (!arrayIsEqual(response.data, bots)) setBots(response.data);
+  }
+
+  const deleteBot = async () => {
+    console.log('deleteBot', id, token);
+
+    const request = {
+      url: 'https://admin.instantchatbot.net:6200/deleteBot',
+      method: 'post',
+      data: {
+        botId: id,
+        userToken: token
+      }
+    }
+
+    let response;
+
+    try {
+      response = await axios(request);
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+
+    console.log(response.data);
+    
   }
 
   useEffect(() => {
@@ -72,6 +96,10 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
       </Container> 
     }
     {curBot && <Container backgroundColor='white'>
+      <Alert status={alertStatus} marginBottom={'0'} visibility={alertStatus && alertMessage ? 'visible' : 'hidden'}>
+          <AlertIcon />
+          {alertMessage}
+      </Alert>
       <Box position='relative'>
         <Image className='delete-icon' src={deleteIcon} height="1.5rem" width="1.5rem" marginRight='-.25rem' position='absolute' right='.5rem' top='.5rem' onClick={() => deleteBot()}/>
         <Heading textAlign="center" marginBottom='12px' color='navy'>{curBot.botName}</Heading>
