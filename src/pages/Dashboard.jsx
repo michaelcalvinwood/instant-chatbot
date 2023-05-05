@@ -20,11 +20,9 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
   console.log('curBot', curBot);
 
   var arrayIsEqual = function(x, y) {
-    return _(x).differenceWith(y, _.isEqual).isEmpty();
+    return _(x).differenceWith(y, _.isEqual).isEmpty() && x.length === y.length;
   };
 
-
- 
 
   const getBots = async () => {
     const request = {
@@ -44,8 +42,12 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
       return;
     }
 
-    console.log(response.data);
-    if (!arrayIsEqual(response.data, bots)) setBots(response.data);
+    console.log('db  bots', response.data);
+    console.log('cur bots', bots)
+    if (!arrayIsEqual(response.data, bots)) {
+      console.log('setBots');
+      setBots(response.data);
+    }
   }
 
   const deleteBot = async () => {
@@ -71,6 +73,7 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
       return;
     }
 
+    setAlertMessage('');
     console.log(response.data);
     navigate('/dashboard'); 
   }
@@ -80,6 +83,7 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
       console.log('navigate signup');
       navigate('/login');
     } else {
+      setAlertMessage('');
       getBots();
 
     }
