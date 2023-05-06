@@ -28,14 +28,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
-function Login(props) {
+function Login({userName, setAll}) {
 
-
-
-
-  const {userName, setUserName} = props;
-
-  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [alertType, setAlertType] = useState('error');
@@ -55,15 +49,13 @@ function Login(props) {
 
   const setInfo = info => {
     console.log('info', info)
-    console.log(props.setUserName);
-    console.log(info.userName);
-    props.setUserName(info.userName);
-    props.setHasKey(info.hasKey);
-    props.setToken(info.token);
+    const { userId, userName, hasKey, token } = info;
     
-    localStorage.setItem('userName', info.userName);
-    localStorage.setItem('hasKey', JSON.stringify(info.hasKey));
-    localStorage.setItem('token', JSON.stringify(info.token));
+    localStorage.setItem('userId', userId);
+    localStorage.setItem('userName', userName);
+    localStorage.setItem('hasKey', JSON.stringify(hasKey));
+    localStorage.setItem('token', JSON.stringify(token));
+    setAll(userId, userName, token, hasKey);
     navigate('/dashboard');
   }
 
@@ -108,16 +100,12 @@ function Login(props) {
     setAlertMessage('');
   }
 
-
   const query = qs.parse(window.location.search.substring(1));
 
-  
-  
   useEffect(() => {
     loaded = true;
-
-
   })
+  
   return (
     <Container>
       <Heading textAlign="center">Login</Heading>

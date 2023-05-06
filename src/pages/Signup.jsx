@@ -40,7 +40,7 @@ function Signup() {
     setAlertMessage(message);
   }
 
-  const createAccount = () => {
+  const createAccount = ({setAll}) => {
     if (!email) return showAlert('error', 'Please enter an email address.');
     if (!isEmail(email)) return showAlert('error', 'Please enter a valid email address.');
     if (!userName) return showAlert('error', 'Please enter a user name');
@@ -55,6 +55,9 @@ function Signup() {
     if (password.indexOf(' ') !== -1) return showAlert('error', 'Spaces are not allowed in password');
     if (!complexity.check(password, options)) return showAlert('error', 'Password must be at least 8 characters with at least 1 uppercase, 1 lowercase, 1 digit, and 1 special character.')
   
+    localStorage.clear();
+    setAll('', '', null, false);
+
     const request = {
       url: 'https://admin.instantchatbot.net:6200/signup',
       method: 'post',
