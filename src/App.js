@@ -30,7 +30,6 @@ function App() {
           userName={userName}
         />
         <Routes>
-          <Route path="/" element={<Home />}/>
           <Route path="/login" 
             element={
               <Login 
@@ -86,7 +85,8 @@ function App() {
             } 
           
           />
-          <Route path="/account" element={<Account userName={userName}/>} />
+          <Route path="/account" element={!userName ? <Login /> : <Account userName={userName} token={token}/>} />
+          <Route path="/" element={<Home />}/>
           
         </Routes>
       

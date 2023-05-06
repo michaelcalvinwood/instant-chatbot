@@ -91,6 +91,10 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
   return (
     <>    
     {!curBot && <Container backgroundColor='white'>
+      <Alert status={alertStatus} marginBottom={'0'} visibility={alertStatus && alertMessage ? 'visible' : 'hidden'}>
+          <AlertIcon />
+          {alertMessage}
+      </Alert>
         <Heading textAlign="center" marginBottom='12px' color='navy'>Bots</Heading>
         <Link to='/create' ><Button margin="0 auto 1rem auto" display="block">Create New Bot</Button></Link>
       
