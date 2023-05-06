@@ -2,7 +2,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { Box, Container, Heading, FormControl, FormLabel, Input, Stack, Text, Flex, Select, Button, Textarea, Alert, AlertIcon, UnorderedList, ListItem, Spinner } from '@chakra-ui/react'
 import {useDropzone} from 'react-dropzone'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {v4 as uuidv4} from 'uuid';
 
@@ -19,6 +19,8 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const [botName, _setBotName] = useState('');
     const [infoUploaded, setInfoUploaded] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false);
+
+    const navigate = useNavigate();
 
     //console.log('openAIKeys', openAIKeys, websites);
 
@@ -98,21 +100,22 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                 input: 'Who is Julio Iglesius?'
             }
         }
-        let response;
 
+       
+        let response;
         try {
-            if (!debug) {
-                response = await axios(request);
-                console.log(response.data);
-            }
+            console.log('trying now');
+            response = await axios(request);
+            console.log(response.data);
         } catch (err) {
+            console.error('the error', err);
             setAlertStatus('error');
             setAlertMessage('Could not validate your OpenAI Key. Please make sure that it is correct.');
             return;
         }
 
         request = {
-            url: `https://admin.instantchatbot.net:6200/key`,
+            url: `https://admin.instantchatbot.net:6200/setKey`,
             method: 'post',
             data: {
                 token, key: openAIKeys[0]
@@ -128,8 +131,12 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         }
 
         const info = response.data;
+        console.log('setting token and hasKey');
+        localStorage.setItem('token', JSON.stringify(info.token));
+        localStorage.setItem('hasKey', JSON.stringify(true));
         setToken(info.token);
         setHasKey(true);
+
     }
 
     const onDrop = useCallback( async acceptedFiles => {
@@ -247,17 +254,17 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         }
 
         setShowSpinner(false);
-        setBotId(theBotId);
+        setBotName('');
+        setWebsites('');
 
+        //setBotId(theBotId);
+
+        navigate(`/bots/${theBotId}`)
         return;
       })
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
-    useEffect(() => {
-       if (!botName || !websites || !infoUploaded) {
-         if (deployable !== false) setDeployable(false);
-       }
-    })
+
 
     if (!hasKey) {
         return (
@@ -271,7 +278,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                 <Text>The Instant Chatbot service requires each customer to provide their own OpenAI Key for savings, security, and stability.</Text>
                 <UnorderedList paddingLeft="1rem">
                     <ListItem>
-                        <strong>Savings:</strong> Our service converts your content into neurological strands to be stored in our neural network. When your visitors ask questions, our servers find the matching information on the neural network and serve that information to OpenAI so that it can provide a response. Therefore, you only pay us for storing your content in our neural network, and pay for the queries used to extract information from our neural network. With this model, many companies can run state-of-the-art chatbots for under $20/month (including OpenAI fees).</ListItem>
+                        <strong>Savings:</strong> Our service converts your content into neurological strands to be stored in our neural network. When your visitors ask questions, our servers find the matching information on the neural network and serve that information to OpenAI so that it can provide a response. Therefore, you only pay us for storing your content in our neural network, and pay for the queries used to extract information from our neural network. With this model, many companies can run state-of-the-art chatbots for only $5/month (excluding OpenAI fees).</ListItem>
                     <ListItem> <strong>Security:</strong> If another customer makes unallowed requests (such as hate speech), OpenAI will terminate their access. In this case, only their API key is terminated. Your access remains secure. Please note that we have safeguards to protect your API key from being used for unallowed requests. Providing your own API key protects you against another company who disables our safeguards.
                     </ListItem>
                     <ListItem><strong>Stability:</strong> OpenAI limits the rate at which each API key can access their service. By providing your own key, your access cannot be reduced by another customer's excessive traffic.</ListItem>
@@ -299,10 +306,6 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     <Container backgroundColor='white'>
         <Heading as='h1' textAlign="center">Create Bot</Heading>
         
-        <Box color="navy" display='flex' justifyContent={'space-between'}>
-            <Text>Query Tokens: {queryTokens.toLocaleString("en-US")}   </Text>
-            <Text>Storage Tokens: {storageTokens.toLocaleString("en-US")} </Text>
-        </Box>
         <Box
             as="section"
             bg="bg-surface"
@@ -353,12 +356,18 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                 </div>
             </Box>
         </Flex> }
-        {botId && <Box border='1px solid navy' borderRadius='8px' padding='.25rem 1rem'>       
-            <Text marginTop="12px" textAlign={'center'} fontWeight={'bold'}>head</Text>
-            <Text marginBottom="6px">{`<link rel="stylesheet" href="https://instantchatbot.net/bot/${botId}/instantchatbot.css?v=1">`}</Text>
-            <Text textAlign={'center'} fontWeight={'bold'}>body</Text>
-            <Text>{`<script src="https://instantchatbot.net/bot/${botId}/instantchatbot.js?v=1"><script>`}</Text>
-        </Box>}
+        {/* {botId && <>
+            <Box border='1px solid navy' borderRadius='8px' padding='.25rem 1rem'>       
+                <Text marginTop="12px" textAlign={'center'} fontWeight={'bold'}>head</Text>
+                <Text marginBottom="6px">{`<link rel="stylesheet" href="https://instantchatbot.net/bot/${botId}/instantchatbot.css?v=1">`}</Text>
+                <Text textAlign={'center'} fontWeight={'bold'}>body</Text>
+                <Text>{`<script src="https://instantchatbot.net/bot/${botId}/instantchatbot.js?v=1"><script>`}</Text>
+            </Box>
+            <Link to={`/bots/${botId}/?add=true`}>
+                <Button colorScheme="blue" display='block' margin='0 auto'>Add More Data</Button>
+            </Link>
+        </>
+        } */}
         </Container>
     </Box>
     {showSpinner && <Box height='100vh' width="100vw" position='fixed' top='0' left='0' display='flex' justifyContent={'center'} alignItems={'center'}>

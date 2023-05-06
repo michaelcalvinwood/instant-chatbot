@@ -46,24 +46,22 @@ function App() {
           />
           <Route path="/signup" element={<Signup setAll={setAll} />} />
           <Route path="/purchase" element={!userName ? <Login /> : <Purchase token={token} userName={userName}/>} />
-          <Route path="/dashboard" 
+          <Route path="/bots" 
             element={
               <Dashboard 
                 userName={userName}
-                storageTokens={storageTokens}
-                queryTokens={queryTokens}
+               
                 hasKey={hasKey}
                 token={token}
               />
             } 
           
           />
-          <Route path="/dashboard/:id" 
+          <Route path="/bots/:id" 
             element={
               <Dashboard 
                 userName={userName}
-                storageTokens={storageTokens}
-                queryTokens={queryTokens}
+                
                 hasKey={hasKey}
                 token={token}
               />
@@ -77,8 +75,7 @@ function App() {
             element={ !userName ? <Login /> :
               <Create 
                 userName={userName}
-                storageTokens={storageTokens}
-                queryTokens={queryTokens}
+              
                 hasKey={hasKey}
                 token={token}
                 setHasKey={setHasKey}

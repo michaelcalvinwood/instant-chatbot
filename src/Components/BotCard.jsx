@@ -11,7 +11,7 @@ function BotCard({bot, userToken, setEditBot}) {
   }
 
   return (
-    <Link to={`/dashboard/${bot.botId}`} >
+    <Link to={`/bots/${bot.botId}`} >
       <Box className= 'bot-card' height="fit-content" padding=".5rem 1rem" margin="1rem .5rem" border="1px solid navy" borderRadius="4px" width="25vw" minWidth="14rem" boxShadow='0 4px 8px 0 rgba(0,0,0,0.2)' >
           <Heading as="h6" size="xs" textAlign={"center"} color="navy">{bot.botName} </Heading>
           <Text>{bot.websites.replaceAll("\n", ", ")}</Text>

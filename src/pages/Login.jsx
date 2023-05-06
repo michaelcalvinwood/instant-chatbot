@@ -34,10 +34,8 @@ function Login({userName, setAll}) {
   const [password, setPassword] = useState('');
   const [alertType, setAlertType] = useState('error');
   const [alertMessage, setAlertMessage] = useState('');
+  const [localUserName, setLocalUserName] = useState('');
 
-  const propsRef = useRef();
-  propsRef.current = props;
- 
   let navigate = useNavigate();
   let loaded = false;
   if (window.location.pathname !== '/login') window.location.href = '/login';
@@ -56,18 +54,18 @@ function Login({userName, setAll}) {
     localStorage.setItem('hasKey', JSON.stringify(hasKey));
     localStorage.setItem('token', JSON.stringify(token));
     setAll(userId, userName, token, hasKey);
-    navigate('/dashboard');
+    navigate('/bots');
   }
 
   const loginToAccount = () => {
-    if (!userName) return showAlert('error', 'Please enter a user name');
+    if (!localUserName) return showAlert('error', 'Please enter a user name');
     if (!password) return showAlert('error', 'Please enter a password');
     
     const request = {
       url: 'https://admin.instantchatbot.net:6200/login',
       method: 'post',
       data: {
-        password, userName
+        password, userName: localUserName
       }
     }
 
@@ -82,16 +80,15 @@ function Login({userName, setAll}) {
     })
   }
 
-  const login = () => {
-
-  }
-
   const updateUserName = e => {
-    console.log('updateUserName', loaded, propsRef);
-    
+    console.log('updateUserName', e.target.value);
+
     const val = e.target.value;
     var regex = new RegExp(/^[A-Za-z][A-Za-z0-9\-]*$/gm);
-    if (regex.test(val)) propsRef.current.setUserName(val); 
+    if (regex.test(val)) {
+      console.log('setting Local User Name');
+      setLocalUserName(val); 
+    }
     setAlertMessage('')
   }
 
@@ -105,7 +102,7 @@ function Login({userName, setAll}) {
   useEffect(() => {
     loaded = true;
   })
-  
+
   return (
     <Container>
       <Heading textAlign="center">Login</Heading>
@@ -125,7 +122,7 @@ function Login({userName, setAll}) {
           <Stack spacing="5">
             <FormControl isRequired>
               <FormLabel htmlFor="name">User Name</FormLabel>
-              <Input id="name" type="text" value={userName} onChange={updateUserName}/>
+              <Input id="name" type="text" value={localUserName} onChange={updateUserName}/>
             </FormControl>
             <FormControl isRequired>
               <FormLabel htmlFor="password">Password</FormLabel>

@@ -60,13 +60,13 @@ export const Header = ({userName}) => {
                         <img src={InstantChatBotIcon} height="64px" width="64px"/>
                         <Box margin="none" padding="none" textAlign="center" fontWeight='700' fontSize='2rem' lineHeight='1.2'>Instant ChatBot</Box>
                 </Flex>
-          <Flex justify="space-between">
-            <HStack spacing="4">
+          <Flex justify="space-between" >
+            <HStack spacing="4" colorScheme="blue">
               
               {isDesktop && (
-                <ButtonGroup variant="ghost" spacing="1">
+                <ButtonGroup variant="ghost" spacing="1" >
                   <Link to="./"><Button aria-current={pathname === '/' ? 'page' : ''}>Home</Button></Link>
-                  <Link to={userName ? "./dashboard" : '/login'}><Button aria-current={pathname === '/dashboard' ? 'page' : ''}>Dashboard</Button></Link>
+                  <Link to={userName ? "./bots" : '/login'}><Button aria-current={pathname === '/bots' ? 'page' : ''}>Bots</Button></Link>
                   <Link to={userName ? "./create" : '/login'}><Button aria-current={pathname === '/create' ? 'page' : ''}>Create</Button></Link>
               
                   <Link to={userName ? "./purchase" : '/login'}><Button aria-current={pathname === '/purchase' ? 'page' : ''}>Purchase</Button></Link>

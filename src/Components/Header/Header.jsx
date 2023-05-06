@@ -48,7 +48,7 @@ import {
                     {isDesktop && (
                     <ButtonGroup variant="ghost-on-accent" spacing="1">
                         <Link to="./"><Button>Home</Button></Link>
-                        <Link to="./dashboard"><Button>Dashboard</Button></Link>
+                        <Link to="./bots"><Button>Bots</Button></Link>
                         <Link to="./purchase"><Button>Credits</Button></Link>
                         
                         <Link to="./login"><Button>Login</Button></Link>

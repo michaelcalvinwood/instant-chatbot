@@ -14,6 +14,8 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
   const {id} = useParams();
   const [alertStatus, setAlertStatus] = useState('success');
   const [alertMessage, setAlertMessage] = useState('');
+  const [addMore, setAddMore] = useState(false);
+  const [deploy, setDeploy] = useState(false);
 
   const curBot = id && bots.length && bots.find(bot => bot.botId === id) ? bots.find(bot => bot.botId === id) : null;
 
@@ -75,7 +77,7 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
 
     setAlertMessage('');
     console.log(response.data);
-    navigate('/dashboard'); 
+    navigate('/bots'); 
   }
 
   useEffect(() => {
@@ -113,10 +115,15 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
       <Box position='relative'>
         <Image className='delete-icon' src={deleteIcon} height="1.5rem" width="1.5rem" marginRight='-.25rem' position='absolute' right='.5rem' top='.5rem' onClick={() => deleteBot()}/>
         <Heading textAlign="center" marginBottom='12px' color='navy'>{curBot.botName}</Heading>
-        <Link to='/create' ><Button colorScheme="blue" margin="0 auto 1rem auto" display="block">Add Content</Button></Link>
+        { !deploy && !addMore && <Box>
+          <Button colorScheme="blue" margin="0 auto 1rem auto" display="block" width="8rem" onClick={() => setDeploy(true)}>Deploy</Button>
+          <Button colorScheme="blue" margin="0 auto 1rem auto" display="block" width="8rem" onClick={() => setAddMore(true)}>Add Content</Button>
+          
+        </Box>
+
+        }
       </Box>
      
-   
       </Container> }  
     </>
 
