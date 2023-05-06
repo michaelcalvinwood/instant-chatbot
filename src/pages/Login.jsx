@@ -58,10 +58,12 @@ function Login(props) {
     console.log(props.setUserName);
     console.log(info.userName);
     props.setUserName(info.userName);
-    props.setStorageTokens(info.storageTokens);
-    props.setQueryTokens(info.queryTokens);
     props.setHasKey(info.hasKey);
     props.setToken(info.token);
+    
+    localStorage.setItem('userName', info.userName);
+    localStorage.setItem('hasKey', JSON.stringify(info.hasKey));
+    localStorage.setItem('token', JSON.stringify(info.token));
     navigate('/dashboard');
   }
 
@@ -108,10 +110,13 @@ function Login(props) {
 
 
   const query = qs.parse(window.location.search.substring(1));
+
   
   
   useEffect(() => {
     loaded = true;
+
+
   })
   return (
     <Container>
