@@ -8,7 +8,6 @@ import {v4 as uuidv4} from 'uuid';
 
 function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey, setToken}) {
     const [contentType, setContentType] = useState('pdf');
-    const [websites, _setWebsites] = useState('');
     const [botId, setBotId] = useState('');
     const [bytes, setBytes] = useState(0);
     const [openAIKeys, _setOpenAiKeys] =  useState([]);
@@ -33,10 +32,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         _setOpenAiKeys(value);
     }
 
-    const setWebsites = value => {
-        websitesRef.current = value;
-        _setWebsites(value);
-    }
+
 
     const setBotName = value => {
         botNameRef.current = value;
@@ -76,7 +72,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             url: '',
             method: 'post',
             data: {
-                ingestServer, qdrantServer, appServer, botId, openAIKeys, websites, userName
+                ingestServer, qdrantServer, appServer, botId, openAIKeys, websites: '', userName
             }
         }
 
@@ -255,7 +251,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
 
         setShowSpinner(false);
         setBotName('');
-        setWebsites('');
+        
 
         //setBotId(theBotId);
 
@@ -331,16 +327,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                         
                 />
             </FormControl>
-            <Text marginTop="24px">Websites (e.g. example.com, www.example.com):</Text>
-            <Textarea value={websites}  color='black' 
-                onChange={(e) => {
-                    setAlertMessage('');
-                    setWebsites(e.target.value);
-                    updateBotConfig();
-                }}
-                  
-            />
-
+           
             <Text marginTop="24px">Load Content:</Text>
             <Select value={contentType} onChange={(e) => console.log(setContentType(e.target.value))}>
                 <option value='pdf'>PDF</option>
