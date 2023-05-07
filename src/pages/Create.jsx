@@ -307,7 +307,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             <Text marginTop='1.25rem'>
                     Content Description:
                 </Text>
-                <Input id="medium" size="md" placeholder="" data-peer  value={botName}
+                <Input id="medium" size="md" placeholder="" data-peer  value={description}
                     onChange={(e) => {
                         setAlertMessage('');
                         setDescription(e.target.value)

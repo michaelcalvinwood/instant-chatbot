@@ -27,7 +27,7 @@ import isEmail from 'validator/lib/isEmail';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-function Signup() {
+function Signup({setAll}) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,7 +40,7 @@ function Signup() {
     setAlertMessage(message);
   }
 
-  const createAccount = ({setAll}) => {
+  const createAccount = () => {
     if (!email) return showAlert('error', 'Please enter an email address.');
     if (!isEmail(email)) return showAlert('error', 'Please enter a valid email address.');
     if (!userName) return showAlert('error', 'Please enter a user name');

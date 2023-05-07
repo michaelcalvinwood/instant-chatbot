@@ -23,6 +23,7 @@ function App() {
   console.log('App', userName, hasKey, token);
 
   const setAll = (theUserId, theUserName, theToken, theHasKey) => {
+    console.log('App setAll');
     setUserId(theUserId);
     setUserName(theUserName);
     setToken(theToken);
