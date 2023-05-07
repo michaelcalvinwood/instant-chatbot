@@ -18,6 +18,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const [botName, _setBotName] = useState('');
     const [infoUploaded, setInfoUploaded] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false);
+    const [description, setDescription] = useState('');
 
     const navigate = useNavigate();
 
@@ -46,17 +47,6 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         if (i === 0) return `${bytes} ${sizes[i]}`
         return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`
       }
-
-    const handleDeployment = () => {
-       
-    }
-
-    const updateBotConfig = () => {
-        if (!dataAdded) return;
-
-        console.log('update bot config at config.instantchatbot.net', openAIKeysRef.current, websitesRef.current);
-
-    }
 
     const setConfig = async botId => {
 
@@ -301,7 +291,6 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     
     <Container backgroundColor='white'>
         <Heading as='h1' textAlign="center">Create Bot</Heading>
-        
         <Box
             as="section"
             bg="bg-surface"
@@ -314,21 +303,28 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         </Alert>
         <Container maxW="lg">
         { !botId && <Flex flexDirection={'column'}>
-            <FormControl>
+            
                 <Text>
                     Give your bot a name:
                 </Text>
                 <Input id="medium" size="md" placeholder=" " data-peer  value={botName}
                     onChange={(e) => {
                         setAlertMessage('');
-                        setBotName(e.target.value)
-                        updateBotConfig();
+                        setBotName(e.target.value)               
                     }}
-                        
                 />
-            </FormControl>
+            
+            <Text marginTop='1.25rem'>
+                    Content Description:
+                </Text>
+                <Input id="medium" size="md" placeholder="" data-peer  value={botName}
+                    onChange={(e) => {
+                        setAlertMessage('');
+                        setDescription(e.target.value)
+                    }}
+                />
            
-            <Text marginTop="24px">Load Content:</Text>
+            <Text marginTop="1.25rem">Load Content:</Text>
             <Select value={contentType} onChange={(e) => console.log(setContentType(e.target.value))}>
                 <option value='pdf'>PDF</option>
                 <option value='scanned'>Scanned PDF</option>
@@ -361,8 +357,6 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         <Spinner size='xl' color='navy'/>
     </Box> }
     </Container>
-    
-
   )
 }
 
