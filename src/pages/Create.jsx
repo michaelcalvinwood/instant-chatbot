@@ -134,12 +134,6 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             return;
         }
 
-        if (!websitesRef.current) {
-            setAlertStatus('error');
-            setAlertMessage('Please provide at least one website name before uploading files.');
-            return;
-        }
-
         if (contentType === 'pdf' && acceptedFiles[0].type !== 'application/pdf') {
             setAlertStatus('error');
             setAlertMessage('Please submit a PDF file.');
@@ -154,7 +148,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             data: {
                 token,
                 botName: botNameRef.current,
-                websites: websitesRef.current
+                websites: ''
             }
         }
 
@@ -173,10 +167,6 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         const {botToken, serverSeries} = response.data;
         const theBotId = response.data.botId;
       
-
-        console.log(`upload files to: https://ingest-${serverSeries}.instantchatbot.net`);
-        console.log('files', acceptedFiles[0].name, acceptedFiles);
-
         const newFileName =  `${uuidv4()}--${acceptedFiles[0].name.replaceAll('--', '-')}`;
 
         request = {
@@ -198,6 +188,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         }
 
         const url = response.data;
+        console.log('url',url);
 
         var file = acceptedFiles[0];
         
@@ -218,14 +209,13 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                 setShowSpinner(false);
                 return;
             }
-        
-        console.log('url',url);
-
+              
         request = {
             url: `https://ingest-${serverSeries}.instantchatbot.net:6201/ingestS3Pdf?bt=${botToken}`,
             method: 'post',
             data: {
-                url: `https://instantchatbot.nyc3.digitaloceanspaces.com/${theBotId}/${newFileName}`
+                url: `https://instantchatbot.nyc3.digitaloceanspaces.com/${theBotId}/${newFileName}`,
+                description
             }
         }
 
