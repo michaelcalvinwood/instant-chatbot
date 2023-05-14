@@ -1,4 +1,4 @@
-import { Box, Container, Heading, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Radio, RadioGroup, Text, Stack, Button, Input } from '@chakra-ui/react'
+import { Box, Container, Heading, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Radio, RadioGroup, Text, Stack, Button, Input, Alert, AlertIcon, Spinner } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { RadioButton, RadioButtonGroup } from './RadioButtonGroup'
 import axios from 'axios';
@@ -8,6 +8,9 @@ function Purchase({token}) {
   const [quantity, setQuantity] = useState(2000);
   const [cost, setCost] = useState(20);
   const [discount, setDiscount] = useState(0);
+  const [alertStatus, setAlertStatus] = useState('success');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const purchaseCredits = () => {
     const request = {
@@ -15,7 +18,7 @@ function Purchase({token}) {
       method: 'post',
       data: {
         userToken: token,
-        quantity
+        quantity, cost, discount
       }
     }
     axios(request)
@@ -48,6 +51,10 @@ function Purchase({token}) {
   return (
     <Container>
       <Heading textAlign="center" marginBottom="1rem">Purchase</Heading>
+      <Alert status={alertStatus} marginBottom={'0'} visibility={alertStatus && alertMessage ? 'visible' : 'hidden'}>
+          <AlertIcon />
+          {alertMessage}
+      </Alert>
       <Text><b>Instructions:</b> Each token costs one penny. Minimum purchase is 2,000 tokens ($20). The purhcase of tokens is non-refundable. Purchases greater than $100 receive a discount based on the amount of purchase.</Text>
       <Text marginTop=".75rem">
           <b>Monthly Charges:</b><br/>&emsp;<b>275 tokens:</b> per Mb of storage (based upon the month's highest storage amount rounded up)<br/>
@@ -69,6 +76,9 @@ function Purchase({token}) {
       <Button colorScheme="blue" display='block' margin='0 auto' onClick={purchaseCredits}>Buy</Button>
      
       <Text fontSize=".75rem" fontStyle={'italic'} margin='.25rem auto' display={'block'} width="fit-content">Protected by Stripe</Text>
+      {showSpinner && <Box height='100vh' width="100vw" position='fixed' top='0' left='0' display='flex' justifyContent={'center'} alignItems={'center'}>
+        <Spinner size='xl' color='navy'/>
+    </Box> }
     </Container>
   )
 }

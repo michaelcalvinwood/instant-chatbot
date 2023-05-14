@@ -257,8 +257,8 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                 <Heading as='h2' size='md' color='navy' textAlign='center'>OpenAI Key Needed</Heading>
                 <Alert status={alertStatus} marginBottom={'0'} visibility={alertStatus && alertMessage ? 'visible' : 'hidden'}>
                     <AlertIcon />
-                        {alertMessage}
-                    </Alert>
+                    {alertMessage}
+                </Alert>
                 <Text>The Instant Chatbot service requires each customer to provide their own OpenAI Key for savings, security, and stability.</Text>
                 <UnorderedList paddingLeft="1rem">
                     <ListItem>
