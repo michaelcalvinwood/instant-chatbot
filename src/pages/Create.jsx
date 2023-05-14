@@ -204,11 +204,13 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                 response = await axios.put(url, file, options);
             }
             catch(err) {
+                console.log('err.response', err.response);
                 console.error(err);
+               
                 setAlertStatus('error');
                 setAlertMessage('Server error. Unable to upload pdf. Please try again later.');
-                setShowSpinner(false);
-                return;
+                return setShowSpinner(false);
+                
             }
               
         request = {
@@ -224,6 +226,11 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             response = await axios(request);
         } catch(err) {
             console.error(err);
+            if (err.response && err.response.status && err.response.status === 402) {
+                setAlertStatus('error');
+                setAlertMessage('Insufficient tokens. Purchase more tokens, and then resubmit.');
+                return setShowSpinner(false);
+            }
             setAlertStatus('error');
             setAlertMessage('Server error. Unable to process pdf. Please try again later.');
             setShowSpinner(false);
