@@ -148,7 +148,8 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             data: {
                 token,
                 botName: botNameRef.current,
-                websites: ''
+                websites: '',
+                botType: 'standard'
             }
         }
 
@@ -304,7 +305,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                     }}
                 />
             
-            <Text marginTop='1.25rem'>
+            {/* <Text marginTop='1.25rem'>
                     Content Description:
                 </Text>
                 <Input id="medium" size="md" placeholder="" data-peer  value={description}
@@ -312,7 +313,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                         setAlertMessage('');
                         setDescription(e.target.value)
                     }}
-                />
+                /> */}
            
             <Text marginTop="1.25rem">Load Content:</Text>
             <Select value={contentType} onChange={(e) => console.log(setContentType(e.target.value))}>
