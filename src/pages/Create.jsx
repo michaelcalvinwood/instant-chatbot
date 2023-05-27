@@ -46,6 +46,26 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`
       }
 
+    const updateAvailableCredits = async () => {
+        let request = {
+            url: `https://app-${serverSeries}.instantchatbot.net/availableCredits`,
+            method: 'post',
+            data: {
+                token
+            }
+        }
+
+        console.log('Create useEffect request', request);
+        let response;
+        
+        try {
+            response = await axios(request);
+            if (availableCredits !== response.data) setAvailableCredits(response.data);
+        } catch (err) {
+            console.error('Create useEffect error', err);
+            
+        }
+    }
     const setConfig = async botId => {
 
         /*
@@ -246,26 +266,10 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
       })
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
-    useEffect(async () => {
-        let request = {
-            url: `https://app-${serverSeries}.instantchatbot.net/availableCredits`,
-            method: 'post',
-            data: {
-                token
-            }
-        }
+ 
 
-        console.log('Create useEffect request', request);
-        let response;
-
-        try {
-            response = await axios(request);
-        } catch (err) {
-            console.error('Create useEffect error', err);
-            return;
-        }
-
-        if (availableCredits !== response.data) setAvailableCredits(response.data);
+    useEffect(() => {
+        updateAvailableCredits();
     })
 
     if (!hasKey) {
@@ -306,6 +310,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
   return (
     
     <Container backgroundColor='white'>
+        <Text color='navy'>Available Credits: {availableCredits}</Text>   
         <Heading as='h1' textAlign="center">Create Bot</Heading>
         <Box
             as="section"
@@ -317,8 +322,10 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             <AlertIcon />
              {alertMessage}
         </Alert>
+
         <Container maxW="lg">
-        { !botId && <Flex flexDirection={'column'}>
+         
+            <Flex flexDirection={'column'}>
             
                 <Text>
                     Give your bot a name:
@@ -354,19 +361,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                     }
                 </div>
             </Box>
-        </Flex> }
-        {/* {botId && <>
-            <Box border='1px solid navy' borderRadius='8px' padding='.25rem 1rem'>       
-                <Text marginTop="12px" textAlign={'center'} fontWeight={'bold'}>head</Text>
-                <Text marginBottom="6px">{`<link rel="stylesheet" href="https://instantchatbot.net/bot/${botId}/instantchatbot.css?v=1">`}</Text>
-                <Text textAlign={'center'} fontWeight={'bold'}>body</Text>
-                <Text>{`<script src="https://instantchatbot.net/bot/${botId}/instantchatbot.js?v=1"><script>`}</Text>
-            </Box>
-            <Link to={`/bots/${botId}/?add=true`}>
-                <Button colorScheme="blue" display='block' margin='0 auto'>Add More Data</Button>
-            </Link>
-        </>
-        } */}
+        </Flex> 
         </Container>
     </Box>
     {showSpinner && <Box height='100vh' width="100vw" position='fixed' top='0' left='0' display='flex' justifyContent={'center'} alignItems={'center'}>
