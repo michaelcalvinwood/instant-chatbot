@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {v4 as uuidv4} from 'uuid';
 
-function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey, setToken}) {
+function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey, setToken, serverSeries, availableCredits, setAvailableCredits}) {
     const [contentType, setContentType] = useState('pdf');
     const [botId, setBotId] = useState('');
     const [bytes, setBytes] = useState(0);
@@ -32,8 +32,6 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         openAIKeysRef.current = value;
         _setOpenAiKeys(value);
     }
-
-
 
     const setBotName = value => {
         botNameRef.current = value;
@@ -168,7 +166,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         const {botToken, serverSeries} = response.data;
         const theBotId = response.data.botId;
       
-        const newFileName =  `${uuidv4()}--${acceptedFiles[0].name.replaceAll('--', '-')}`;
+        const newFileName = `${uuidv4()}--${acceptedFiles[0].name.replaceAll('--', '-')}`;
 
         request = {
             url: `https://ingest-${serverSeries}.instantchatbot.net:6201/presignedUrl?bt=${botToken}`,
@@ -248,7 +246,27 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
       })
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
+    useEffect(async () => {
+        let request = {
+            url: `https://app-${serverSeries}.instantchatbot.net/availableCredits`,
+            method: 'post',
+            data: {
+                token
+            }
+        }
 
+        console.log('Create useEffect request', request);
+        let response;
+
+        try {
+            response = await axios(request);
+        } catch (err) {
+            console.error('Create useEffect error', err);
+            return;
+        }
+
+        if (availableCredits !== response.data) setAvailableCredits(response.data);
+    })
 
     if (!hasKey) {
         return (

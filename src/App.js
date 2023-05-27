@@ -20,6 +20,7 @@ function App() {
   const [userId, setUserId] = useState(localStorage.getItem('userId') || '');
   const [token, setToken] = useState(localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : null);
   const [serverSeries, setServerSeries] = useState(1);
+  const [availableCredits, setAvailableCredits] = useState(0);
 
   console.log('App', userName, hasKey, token);
 
@@ -53,7 +54,6 @@ function App() {
             element={
               <Dashboard 
                 userName={userName}
-               
                 hasKey={hasKey}
                 token={token}
               />
@@ -78,11 +78,13 @@ function App() {
             element={ !userName ? <Login /> :
               <Create 
                 userName={userName}
-              
                 hasKey={hasKey}
                 token={token}
                 setHasKey={setHasKey}
                 setToken={setToken}
+                serverSeries={serverSeries}
+                availableCredits={availableCredits}
+                setAvailableCredits={setAvailableCredits}
               />
             } 
           
