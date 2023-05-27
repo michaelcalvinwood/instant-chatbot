@@ -33,10 +33,10 @@ export const Header = ({userName}) => {
 
 
 
-  const isDesktop = useBreakpointValue({
-    base: false,
-    lg: true,
-  })
+  const isDesktop = window.innerWidth > 600 ? true : false;
+  console.log('window.innerWidth', window.innerWidth)
+
+  console.log('isDesktop',isDesktop)
   return (
     <Box
       as="section"
@@ -52,16 +52,13 @@ export const Header = ({userName}) => {
             lg: '4',
           }}
         >
-        <Flex flexDirection={{
-                sm: 'row',
-                lg: 'column'
-            }}>
-          <Flex marginRight="64px" alignItems='center' justifyContent='center' width="100%">
+        <Flex flexDirection={'column'}>
+          <Flex flexDirection={'row'} marginRight="64px" alignItems='center' justifyContent='center' width="100%">
                         <img src={InstantChatBotIcon} height="64px" width="64px"/>
                         <Box margin="none" padding="none" textAlign="center" fontWeight='700' fontSize='2rem' lineHeight='1.2'>Instant ChatBot</Box>
                 </Flex>
           <Flex justify="space-between" >
-            <HStack spacing="4" colorScheme="blue">
+            <HStack spacing="4">
               
               {isDesktop && (
                 <ButtonGroup variant="ghost" spacing="1" >

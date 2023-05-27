@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 function Home() {
   return (
     <Container backgroundColor='white'>
-        <Heading textAlign='center'>
+        <Heading size='md' textAlign='center'>
           Add AI Chatbots To Your Website<br></br><span style={{color: 'navy'}}>In Less Than Five Minutes!</span>
         </Heading>
         <Text paddingTop=".75rem">

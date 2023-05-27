@@ -19,15 +19,17 @@ function App() {
   const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
   const [userId, setUserId] = useState(localStorage.getItem('userId') || '');
   const [token, setToken] = useState(localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : null);
+  const [serverSeries, setServerSeries] = useState(1);
 
   console.log('App', userName, hasKey, token);
 
-  const setAll = (theUserId, theUserName, theToken, theHasKey) => {
+  const setAll = (theUserId, theUserName, theToken, theHasKey, serverSeries) => {
     console.log('App setAll');
     setUserId(theUserId);
     setUserName(theUserName);
     setToken(theToken);
     setHasKey(theHasKey);
+    setServerSeries(serverSeries);
   }
 
   return (

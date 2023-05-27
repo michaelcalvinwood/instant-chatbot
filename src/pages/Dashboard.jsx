@@ -98,7 +98,7 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
           <AlertIcon />
           {alertMessage}
       </Alert>
-        <Heading textAlign="center" marginBottom='12px' color='navy'>Bots</Heading>
+        <Heading size='md'  textAlign="center" marginBottom='12px' color='navy'>Bots</Heading>
         <Link to='/create' ><Button colorScheme="blue" margin="0 auto 1rem auto" display="block">Create</Button></Link>
       
         <Box display="flex" justifyContent={"space-between"} flexWrap="wrap" height="60vh" overflow={"auto"} padding=".5rem 1rem" border='1px solid navy' borderRadius='8px' width={"100%"}>

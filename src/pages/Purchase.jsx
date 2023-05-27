@@ -29,16 +29,16 @@ function Purchase({token}) {
   }
 
   useEffect(() => {
-    let amount = quantity / 100;
-    if (amount >= 1000) {
+    let amount = quantity;
+    if (amount >= 100000) {
       amount *= .85;
       if (discount !== 15) setDiscount(15);
     }
-    else if (amount >= 500) {
+    else if (amount >= 50000) {
       amount *= .90;
       if (discount !== 10) setDiscount(10);
     }
-    else if (amount >= 100) {
+    else if (amount >= 10000) {
       amount *= .95;
       if (discount !== 5) setDiscount(5);
     } else if (discount !== 0) setDiscount(0);
@@ -61,7 +61,7 @@ function Purchase({token}) {
           &emsp;<b>25 tokens:</b> per Mb of data upload (including upload data from URLs crawled rounded up)<br />
           &emsp;<b>100 tokens:</b> per 100 queries (rounded up, minimum monthly query charge of $1)
       </Text>
-      <Text textAlign={"center"} marginTop="1.5rem">Num Tokens</Text>
+      <Text textAlign={"center"} marginTop="1.5rem">Tokens</Text>
       <Input type="number" min={2000} step={500} value={quantity} width="10rem" display='block' margin="auto" textAlign={"center"}
       onChange={(e) => {
         let test = e.target.value;
@@ -72,7 +72,7 @@ function Purchase({token}) {
         setQuantity(test);
       }} />
       <Text textAlign='center' fontStyle='italic' visibility={discount ? 'visible' : 'hidden'}>{discount}% discount</Text>
-      <Text fontSize="2rem" fontWeight="bold" textAlign="center" marginTop=".5rem">{cost.toLocaleString("en-US", {style:"currency", currency:"USD"})}</Text>
+      <Text fontSize="2rem" fontWeight="bold" textAlign="center" marginTop=".5rem">{(cost/100).toLocaleString("en-US", {style:"currency", currency:"USD"})}</Text>
       <Button colorScheme="blue" display='block' margin='0 auto' onClick={purchaseCredits}>Buy</Button>
      
       <Text fontSize=".75rem" fontStyle={'italic'} margin='.25rem auto' display={'block'} width="fit-content">Protected by Stripe</Text>

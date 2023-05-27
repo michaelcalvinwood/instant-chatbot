@@ -47,13 +47,14 @@ function Login({userName, setAll}) {
 
   const setInfo = info => {
     console.log('info', info)
-    const { userId, userName, hasKey, token } = info;
+    const { userId, userName, hasKey, token, serverSeries } = info;
     
     localStorage.setItem('userId', userId);
     localStorage.setItem('userName', userName);
     localStorage.setItem('hasKey', JSON.stringify(hasKey));
     localStorage.setItem('token', JSON.stringify(token));
-    setAll(userId, userName, token, hasKey);
+    localStorage.setItem('serverSeries', serverSeries.toString());
+    setAll(userId, userName, token, hasKey, serverSeries);
     navigate('/bots');
   }
 
