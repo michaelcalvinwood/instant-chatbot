@@ -14,6 +14,8 @@ import Create from './pages/Create';
 import { useEffect, useState } from 'react';
 import Signup from './pages/Signup';
 import Account from './pages/Account';
+import MobileHeader from './Components/Header/MobileHeader';
+
 function App() {
   const [hasKey, setHasKey] = useState(localStorage.getItem('hasKey') ? JSON.parse(localStorage.getItem('hasKey')) : false);
   const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
@@ -21,6 +23,9 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : null);
   const [serverSeries, setServerSeries] = useState(1);
   const [availableCredits, setAvailableCredits] = useState(0);
+  const [windowWidth, _setWindowWidth] = useState(window.innerWidth);
+
+  const setWindowWidth = width => _setWindowWidth(width);
 
   console.log('App', userName, hasKey, token);
 
@@ -33,12 +38,21 @@ function App() {
     setServerSeries(serverSeries);
   }
 
+  window.addEventListener('resize', () => {
+    console.log('resize');
+    const width = window.innerWidth;
+    if (width !== windowWidth) setWindowWidth(width);
+  })
+
+  useEffect(() => {
+    const width = window.innerWidth;
+    if (width !== windowWidth) setWindowWidth(width);
+  })
+
   return (
     <Box backgroundColor='white' height="100vh">
      
-        <Header 
-          userName={userName}
-        />
+        { window.innerWidth >= 768 ? <Header userName={userName} /> : <MobileHeader userName={userName} />}
         <Routes>
           <Route path="/login" 
             element={

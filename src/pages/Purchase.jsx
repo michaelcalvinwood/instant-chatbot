@@ -14,7 +14,7 @@ function Purchase({token, serverSeries}) {
 
   const purchaseCredits = () => {
     const request = {
-      url: `https://app-${serverSeries}.instantchatbot.net:6200/purchaseCredits`,
+      url: `https://app-${serverSeries}.instantchatbot.net:6250/purchaseCredits`,
       method: 'post',
       data: {
         userToken: token,
