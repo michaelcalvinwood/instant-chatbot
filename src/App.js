@@ -49,7 +49,7 @@ function App() {
             } 
           />
           <Route path="/signup" element={<Signup setAll={setAll} />} />
-          <Route path="/purchase" element={!userName ? <Login /> : <Purchase token={token} userName={userName}/>} />
+          <Route path="/purchase" element={!userName ? <Login /> : <Purchase token={token} userName={userName} serverSeries={serverSeries}/>} />
           <Route path="/bots" 
             element={
               <Dashboard 

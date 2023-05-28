@@ -48,7 +48,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
 
     const updateAvailableCredits = async () => {
         let request = {
-            url: `https://app-${serverSeries}.instantchatbot.net/availableCredits`,
+            url: `https://app-${serverSeries}.instantchatbot.net:6250/availableCredits`,
             method: 'post',
             data: {
                 token
@@ -245,8 +245,11 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         } catch(err) {
             console.error(err);
             if (err.response && err.response.status && err.response.status === 402) {
+                console.log()
+                const {creditNeeded, creditsRemaining} = err.response.data;
+
                 setAlertStatus('error');
-                setAlertMessage('Insufficient tokens. Purchase more tokens, and then resubmit.');
+                setAlertMessage(`Insufficient tokens. Upload requires ${creditNeeded.toLocaleString()} tokens. Please purchase ${(creditNeeded - creditsRemaining).toLocaleString()} additional tokens.`);
                 return setShowSpinner(false);
             }
             setAlertStatus('error');
@@ -310,7 +313,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
   return (
     
     <Container backgroundColor='white'>
-        <Text color='navy'>Available Credits: {availableCredits}</Text>   
+        <Text color='navy' textAlign={'right'}>Available Credits: {availableCredits}</Text>   
         <Heading as='h1' textAlign="center">Create Bot</Heading>
         <Box
             as="section"

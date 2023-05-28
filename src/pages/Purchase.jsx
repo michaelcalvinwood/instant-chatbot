@@ -4,7 +4,7 @@ import { RadioButton, RadioButtonGroup } from './RadioButtonGroup'
 import axios from 'axios';
 import { isInteger } from 'lodash';
 
-function Purchase({token}) {
+function Purchase({token, serverSeries}) {
   const [quantity, setQuantity] = useState(2000);
   const [cost, setCost] = useState(20);
   const [discount, setDiscount] = useState(0);
@@ -14,7 +14,7 @@ function Purchase({token}) {
 
   const purchaseCredits = () => {
     const request = {
-      url: `https://admin.instantchatbot.net:6200/purchaseCredits`,
+      url: `https://app-${serverSeries}.instantchatbot.net:6200/purchaseCredits`,
       method: 'post',
       data: {
         userToken: token,
