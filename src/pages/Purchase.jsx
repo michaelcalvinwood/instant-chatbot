@@ -12,6 +12,11 @@ function Purchase({token, serverSeries, availableCredits, setAvailableCredits}) 
   const [alertMessage, setAlertMessage] = useState('');
   const [showSpinner, setShowSpinner] = useState(false);
 
+  const setMessage = (status, msg) => {
+    setAlertStatus(status);
+    setAlertMessage(msg);
+  }
+
   const purchaseCredits = () => {
     const request = {
       url: `https://app-${serverSeries}.instantchatbot.net:6250/purchaseCredits`,
@@ -47,11 +52,28 @@ function Purchase({token, serverSeries, availableCredits, setAvailableCredits}) 
         console.error('Create useEffect error', err);
         
     }
-}
+  }
+
+  const handleQueryParams = () => {
+    const url = new URL(window.location.href);
+
+    console.log(url);
+
+    const status = url.searchParams.get('status');
+    const msg = url.searchParams.get('msg');
+    
+    console.log('url status ', status);
+    if (!status || !msg) return;
+
+    setMessage(status, msg);
+    
+
+
+  }
 
   useEffect(() => {
     updateAvailableCredits();
-    
+    handleQueryParams();
     let amount = quantity;
     if (amount >= 100000) {
       amount *= .85;
@@ -82,13 +104,13 @@ function Purchase({token, serverSeries, availableCredits, setAvailableCredits}) 
       <Text><b>Instructions:</b> Each token costs one penny. Minimum purchase is 2,000 tokens ($20). The purhcase of tokens is non-refundable. Purchases greater than $100 receive a discount based on the amount of purchase.</Text>
       <Text marginTop=".75rem"><b>Monthly Charges:</b><br/></Text>
             
-      <Text>
-          <Text paddingLeft="1rem">
+      <div>
+          <div style={{paddingLeft:"1rem"}}>
             <b>275 tokens:</b> per Mb of storage (based upon the month's highest storage amount rounded up)<br />
             <b>25 tokens:</b> per Mb of data upload (including upload data from URLs crawled rounded up)<br />
             <b>100 tokens:</b> per 100 queries (rounded up, minimum monthly query charge of $1)
-          </Text>
-      </Text>
+          </div>
+      </div>
       <Text textAlign={"center"} marginTop="1.5rem">Tokens</Text>
       <Input type="number" min={2000} step={500} value={quantity} width="10rem" display='block' margin="auto" textAlign={"center"}
       onChange={(e) => {
