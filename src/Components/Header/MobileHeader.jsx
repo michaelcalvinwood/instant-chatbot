@@ -65,8 +65,9 @@ import {
             <Flex flexDirection={'row'} marginRight="64px" alignItems='center' justifyContent='center' width="100%">
                 <img src={InstantChatBotIcon} height="64px" width="64px"/>
                 <Box margin="none" padding="none" textAlign="center" fontWeight='700' fontSize='2rem' lineHeight='1.2'>Instant ChatBot</Box>
+                <GiHamburgerMenu fontSize={"2rem"} style={{position: 'absolute', top: '.5rem', right: '.5rem', cursor:'pointer'}} ref={btnRef} onClick={onOpen}/>
             </Flex>
-            <GiHamburgerMenu fontSize={"2rem"} style={{position: 'fixed', top: '.5rem', right: '.5rem', cursor:'pointer'}} ref={btnRef} onClick={onOpen}/>
+            
             <Drawer
         isOpen={isOpen}
         placement='right'

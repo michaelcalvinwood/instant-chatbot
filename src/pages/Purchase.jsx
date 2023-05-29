@@ -4,7 +4,7 @@ import { RadioButton, RadioButtonGroup } from './RadioButtonGroup'
 import axios from 'axios';
 import { isInteger } from 'lodash';
 
-function Purchase({token, serverSeries}) {
+function Purchase({token, serverSeries, availableCredits, setAvailableCredits}) {
   const [quantity, setQuantity] = useState(2000);
   const [cost, setCost] = useState(20);
   const [discount, setDiscount] = useState(0);
@@ -28,7 +28,30 @@ function Purchase({token, serverSeries}) {
     })
   }
 
+  const updateAvailableCredits = async () => {
+    let request = {
+        url: `https://app-${serverSeries}.instantchatbot.net:6250/availableCredits`,
+        method: 'post',
+        data: {
+            token
+        }
+    }
+
+    console.log('Create useEffect request', request);
+    let response;
+    
+    try {
+        response = await axios(request);
+        if (availableCredits !== response.data) setAvailableCredits(response.data);
+    } catch (err) {
+        console.error('Create useEffect error', err);
+        
+    }
+}
+
   useEffect(() => {
+    updateAvailableCredits();
+    
     let amount = quantity;
     if (amount >= 100000) {
       amount *= .85;
@@ -50,6 +73,7 @@ function Purchase({token, serverSeries}) {
 
   return (
     <Container>
+      <Text color='navy' textAlign={'right'}>Available Credits: {availableCredits}</Text>   
       <Heading textAlign="center" marginBottom="1rem">Purchase</Heading>
       <Alert status={alertStatus} marginBottom={'0'} visibility={alertStatus && alertMessage ? 'visible' : 'hidden'}>
           <AlertIcon />

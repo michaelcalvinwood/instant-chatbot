@@ -260,8 +260,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
 
         setShowSpinner(false);
         setBotName('');
-        
-
+    
         //setBotId(theBotId);
 
         navigate(`/bots/${theBotId}`)
@@ -353,8 +352,8 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             <Text marginTop="1.25rem">Load Content:</Text>
             <Select value={contentType} onChange={(e) => console.log(setContentType(e.target.value))}>
                 <option value='pdf'>PDF</option>
-                <option value='scanned'>Scanned PDF</option>
-                <option value='docx'>DOCX</option>
+                {/* <option value='scanned'>Scanned PDF</option>
+                <option value='docx'>DOCX</option> */}
             </Select>
             <Box marginTop="8px" height="96px" padding='.5rem' border='1px solid var(--chakra-colors-gray-200)' borderRadius='8px' cursor='pointer'>
                 <div {...getRootProps()}>
