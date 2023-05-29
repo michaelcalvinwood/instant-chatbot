@@ -155,9 +155,9 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
           <ModalCloseButton />
           <ModalBody>
           <Text>
-            <span style={{fontWeight: 'bold'}}>CSS:&nbsp;</span>{`https://instantchatbot.net/bot/${curBot.botId}/instantchatbot.css?v=${uuidv4()}`}
+            {`<link rel="stylesheet" href="https://instantchatbot.net/bot/${curBot.botId}/instantchatbot.css?v=${uuidv4()}">`}
             <br /><br />
-            <span style={{fontWeight: 'bold'}}>JS:&nbsp;</span>{`https://instantchatbot.net/bot/${curBot.botId}/instantchatbot.js?v=${uuidv4()}`}
+            {`<script src="https://instantchatbot.net/bot/${curBot.botId}/instantchatbot.js?v=${uuidv4()}"></script>`}
           </Text>
           </ModalBody>
 

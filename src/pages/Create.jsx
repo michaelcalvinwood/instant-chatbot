@@ -19,14 +19,25 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const [infoUploaded, setInfoUploaded] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false);
     const [description, setDescription] = useState('');
+    const [text, _setText] = useState('');
 
     const navigate = useNavigate();
+
+    console.log('text', text);
 
     //console.log('openAIKeys', openAIKeys, websites);
 
     const openAIKeysRef = useRef('');
     const websitesRef = useRef('');
     const botNameRef = useRef('');
+    const textRef = useRef('');
+
+    const setText = data => {
+        let curText = textRef.current;
+        let newText = curText + "\n" + data;
+        textRef.current = newText;
+        _setText(newText)
+    }
 
     const setOpenAiKeys = value => {
         openAIKeysRef.current = value;
@@ -160,7 +171,34 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
 
         setShowSpinner(true);
 
+        const fd = new FormData();
+        acceptedFiles.forEach(file =>fd.append('File[]',file));
+
         let request = {
+            url: `https://pdf.instantchatbot.net:6256/convertPdfToText/?t=${token}`,
+            method: 'post',
+            data: fd,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }
+        let response;
+        try {
+            response = await axios(request)
+        } catch (err) {
+            console.error(err.response);
+            setAlertStatus('error');
+            setAlertMessage('Server error. Unable to upload PDF.');
+            setShowSpinner(false);
+            return;
+        }
+        setShowSpinner(false);
+        setText(response.data);
+        return;
+
+
+
+
+
+        request = {
             url: 'https://admin.instantchatbot.net:6200/newBot',
             method: 'post',
             data: {
@@ -171,7 +209,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             }
         }
 
-        let response;
+       
 
         try {
             response = await axios(request)
@@ -271,7 +309,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
  
 
     useEffect(() => {
-        updateAvailableCredits();
+        //updateAvailableCredits();
     })
 
     if (!hasKey) {
