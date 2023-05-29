@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Alert, AlertIcon, Box, Button, Container, Heading, Image, Text, Textarea } from '@chakra-ui/react'
+import { Alert, AlertIcon, Box, Button, Container, Heading, Image, Text, Textarea, useDisclosure } from '@chakra-ui/react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import BotCard from '../Components/BotCard';
 import _ from 'lodash';
 import deleteIcon from '../assets/images/delete.svg';
+import { v4 as uuidv4 } from 'uuid';
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react'
 
 function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
   console.log('Dashboard', userName);
@@ -17,6 +27,8 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
   const [addMore, setAddMore] = useState(false);
   const [deploy, setDeploy] = useState(false);
   const [websites, setWebsites] = useState('');
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const curBot = id && bots.length && bots.find(bot => bot.botId === id) ? bots.find(bot => bot.botId === id) : null;
 
@@ -128,7 +140,7 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
             <Button colorScheme="blue" margin=".5rem auto 1rem auto" display="block" width="8rem" onClick={() => setAddMore(true)}>Set Websites</Button>
             <Box width="100%" display="flex" justifyContent={"space-between"}>
               <Button colorScheme="blue" width="8rem" onClick={() => setAddMore(true)}>Add Content</Button>
-              <Button colorScheme="blue" width="8rem" onClick={() => setDeploy(true)}>Deploy</Button>
+              <Button colorScheme="blue" width="8rem" onClick={onOpen}>Deploy</Button>
               
           
             </Box>
@@ -136,6 +148,27 @@ function Dashboard({userName, queryTokens, storageTokens, token, hasKey}) {
 
         }
       </Box>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader textAlign={'center'}>Deployment Code</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+          <Text>
+            <span style={{fontWeight: 'bold'}}>CSS:&nbsp;</span>{`https://instantchatbot.net/bot/${curBot.botId}/instantchatbot.css?v=${uuidv4()}`}
+            <br /><br />
+            <span style={{fontWeight: 'bold'}}>JS:&nbsp;</span>{`https://instantchatbot.net/bot/${curBot.botId}/instantchatbot.js?v=${uuidv4()}`}
+          </Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onClose} display="block" margin="auto">
+              Close
+            </Button>
+            
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
      
       </Container> }  
     </>
