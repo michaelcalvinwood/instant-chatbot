@@ -1,5 +1,14 @@
-import React from 'react'
-
+import React, { useState } from 'react'
+import {
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
+} from '@chakra-ui/react'
 import {
     Avatar,
     Box,
@@ -21,6 +30,10 @@ import {
   import { GiHamburgerMenu } from 'react-icons/gi';
 
   export const MobileHeader = ({userName}) => {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const btnRef = React.useRef()
+  
+
     let location = useLocation();
     let {pathname} = location;
   
@@ -53,7 +66,27 @@ import {
                 <img src={InstantChatBotIcon} height="64px" width="64px"/>
                 <Box margin="none" padding="none" textAlign="center" fontWeight='700' fontSize='2rem' lineHeight='1.2'>Instant ChatBot</Box>
             </Flex>
-            <GiHamburgerMenu fontSize={"2rem"} style={{position: 'fixed', top: '.5rem', right: '.5rem'}}/>
+            <GiHamburgerMenu fontSize={"2rem"} style={{position: 'fixed', top: '.5rem', right: '.5rem'}} ref={btnRef} onClick={onOpen}/>
+            <Drawer
+        isOpen={isOpen}
+        placement='right'
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Menu</DrawerHeader>
+
+          <DrawerBody>
+            Drawer Body
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button colorScheme='blue' onClick={onClose}>Close</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
             
           </Container>
         </Box>
