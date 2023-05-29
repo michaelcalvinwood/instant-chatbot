@@ -56,10 +56,14 @@ function Purchase({token, serverSeries}) {
           {alertMessage}
       </Alert>
       <Text><b>Instructions:</b> Each token costs one penny. Minimum purchase is 2,000 tokens ($20). The purhcase of tokens is non-refundable. Purchases greater than $100 receive a discount based on the amount of purchase.</Text>
-      <Text marginTop=".75rem">
-          <b>Monthly Charges:</b><br/>&emsp;<b>275 tokens:</b> per Mb of storage (based upon the month's highest storage amount rounded up)<br/>
-          &emsp;<b>25 tokens:</b> per Mb of data upload (including upload data from URLs crawled rounded up)<br />
-          &emsp;<b>100 tokens:</b> per 100 queries (rounded up, minimum monthly query charge of $1)
+      <Text marginTop=".75rem"><b>Monthly Charges:</b><br/></Text>
+            
+      <Text>
+          <Text paddingLeft="1rem">
+            <b>275 tokens:</b> per Mb of storage (based upon the month's highest storage amount rounded up)<br />
+            <b>25 tokens:</b> per Mb of data upload (including upload data from URLs crawled rounded up)<br />
+            <b>100 tokens:</b> per 100 queries (rounded up, minimum monthly query charge of $1)
+          </Text>
       </Text>
       <Text textAlign={"center"} marginTop="1.5rem">Tokens</Text>
       <Input type="number" min={2000} step={500} value={quantity} width="10rem" display='block' margin="auto" textAlign={"center"}
@@ -75,7 +79,7 @@ function Purchase({token, serverSeries}) {
       <Text fontSize="2rem" fontWeight="bold" textAlign="center" marginTop=".5rem">{(cost/100).toLocaleString("en-US", {style:"currency", currency:"USD"})}</Text>
       <Button colorScheme="blue" display='block' margin='0 auto' onClick={purchaseCredits}>Buy</Button>
      
-      <Text fontSize=".75rem" fontStyle={'italic'} margin='.25rem auto' display={'block'} width="fit-content">Protected by Stripe</Text>
+      <Text fontSize=".75rem" fontStyle={'italic'} margin='.25rem auto' display={'block'} width="fit-content" textAlign={'center'}>A Michael Wood Creation<br />Protected by Stripe</Text>
       {showSpinner && <Box height='100vh' width="100vw" position='fixed' top='0' left='0' display='flex' justifyContent={'center'} alignItems={'center'}>
         <Spinner size='xl' color='navy'/>
     </Box> }
