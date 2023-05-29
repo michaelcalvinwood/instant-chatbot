@@ -66,7 +66,7 @@ import {
                 <img src={InstantChatBotIcon} height="64px" width="64px"/>
                 <Box margin="none" padding="none" textAlign="center" fontWeight='700' fontSize='2rem' lineHeight='1.2'>Instant ChatBot</Box>
             </Flex>
-            <GiHamburgerMenu fontSize={"2rem"} style={{position: 'fixed', top: '.5rem', right: '.5rem'}} ref={btnRef} onClick={onOpen}/>
+            <GiHamburgerMenu fontSize={"2rem"} style={{position: 'fixed', top: '.5rem', right: '.5rem', cursor:'pointer'}} ref={btnRef} onClick={onOpen}/>
             <Drawer
         isOpen={isOpen}
         placement='right'
@@ -76,15 +76,24 @@ import {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Menu</DrawerHeader>
+          <DrawerHeader textAlign={'center'}>Instant Chatbot</DrawerHeader>
 
           <DrawerBody>
-            Drawer Body
+          <ButtonGroup variant="ghost" spacing="1" display='flex' flexDirection={'column'} alignItems={'center'}>
+            <Link to="./"><Button aria-current={pathname === '/' ? 'page' : ''}  onClick={onClose}>Home</Button></Link>
+            <Link to={userName ? "./bots" : '/login'}><Button aria-current={pathname === '/bots' ? 'page' : ''} onClick={onClose}>Bots</Button></Link>
+            <Link to={userName ? "./create" : '/login'}><Button aria-current={pathname === '/create' ? 'page' : ''} onClick={onClose}>Create</Button></Link>
+        
+            <Link to={userName ? "./purchase" : '/login'}><Button aria-current={pathname === '/purchase' ? 'page' : ''} onClick={onClose}>Purchase</Button></Link>
+            <Link to="./signup"><Button aria-current={pathname === '/signup' ? 'page' : ''} onClick={onClose}>Signup</Button></Link>
+            <Link to="./login"><Button aria-current={pathname === '/login' ? 'page' : ''} onClick={onClose}>Login</Button></Link>
+            <Link to={userName ? '/account' : '/login'} onClick={onClose}>Settings</Link>
+          </ButtonGroup>
           </DrawerBody>
 
-          <DrawerFooter>
+          {/* <DrawerFooter>
             <Button colorScheme='blue' onClick={onClose}>Close</Button>
-          </DrawerFooter>
+          </DrawerFooter> */}
         </DrawerContent>
       </Drawer>
             
