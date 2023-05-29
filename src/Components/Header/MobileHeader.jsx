@@ -18,7 +18,8 @@ import {
   import { Link } from 'react-router-dom';
   import InstantChatBotIcon from '../../assets/images/instantChatBotoLogo.svg'
   import * as qs from 'qs';
-  
+  import { GiHamburgerMenu } from 'react-icons/gi';
+
   export const MobileHeader = ({userName}) => {
     let location = useLocation();
     let {pathname} = location;
@@ -48,10 +49,11 @@ import {
               lg: '4',
             }}
           >
-        <Flex flexDirection={'row'} marginRight="64px" alignItems='center' justifyContent='center' width="100%">
-            <img src={InstantChatBotIcon} height="64px" width="64px"/>
-            <Box margin="none" padding="none" textAlign="center" fontWeight='700' fontSize='2rem' lineHeight='1.2'>Instant ChatBot</Box>
-        </Flex>
+            <Flex flexDirection={'row'} marginRight="64px" alignItems='center' justifyContent='center' width="100%">
+                <img src={InstantChatBotIcon} height="64px" width="64px"/>
+                <Box margin="none" padding="none" textAlign="center" fontWeight='700' fontSize='2rem' lineHeight='1.2'>Instant ChatBot</Box>
+            </Flex>
+            <GiHamburgerMenu fontSize={"2rem"} style={{position: 'fixed', top: '.5rem', right: '.5rem'}}/>
             
           </Container>
         </Box>

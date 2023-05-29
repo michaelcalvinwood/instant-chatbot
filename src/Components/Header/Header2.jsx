@@ -57,6 +57,8 @@ export const Header = ({userName}) => {
                         <img src={InstantChatBotIcon} height="64px" width="64px"/>
                         <Box margin="none" padding="none" textAlign="center" fontWeight='700' fontSize='2rem' lineHeight='1.2'>Instant ChatBot</Box>
                 </Flex>
+       
+          <Text fontSize={'.75rem'} fontStyle='italic' textAlign={'center'}>by Michael Wood</Text>
           <Flex justify="space-between" >
             <HStack spacing="4">
               

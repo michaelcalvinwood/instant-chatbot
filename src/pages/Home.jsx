@@ -18,15 +18,16 @@ function Home() {
           </UnorderedList>
    
         <Text paddingTop=".75rem">
-        You can even create <strong>different chatbots for different webpages</strong>. Example webpages include:
+          You can even create <strong>different chatbots for different webpages</strong>. Example webpages include:
+        </Text>
         <UnorderedList paddingLeft='1rem'>
           <ListItem><strong>About:</strong> Display a chatbot loaded with your company information (such as contact information).</ListItem>
-          <ListItem><strong>Support:</strong> Display a chatbot loaded with your support documents and FAQs to provide your customers instant, intelligent answers to their questions.
+          <ListItem><strong>Support:</strong> Display a chatbot loaded with your support documents and FAQs to provide your customers instant, intelligent answers to their questions.</ListItem>
           <ListItem><strong>Products:</strong> Display a chatbot loaded with information regarding your products and services to turn your chatbot into an intelligent sales assistant.</ListItem>
-          </ListItem>
+         
           <ListItem> <strong>Home:</strong> Display a chatbot loaded with the content of your entire site; allowing visitors to ask questions regarding anything and everything published on your website.</ListItem>
         </UnorderedList>
-        </Text>
+        
         <Text paddingTop=".75rem">
             You can create as many chatbots for your website as you want, and you can <strong>get started for free.</strong></Text>
         <Text paddingTop=".75rem">
