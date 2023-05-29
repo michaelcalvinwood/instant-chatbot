@@ -1,10 +1,19 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react'
-import { Box, Container, Heading, FormControl, FormLabel, Input, Stack, Text, Flex, Select, Button, Textarea, Alert, AlertIcon, UnorderedList, ListItem, Spinner } from '@chakra-ui/react'
+import { Box, Container, Heading, FormControl, FormLabel, Input, Stack, Text, Flex, Select, Button, Textarea, Alert, AlertIcon, UnorderedList, ListItem, Spinner, useDisclosure } from '@chakra-ui/react'
 import {useDropzone} from 'react-dropzone'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {v4 as uuidv4} from 'uuid';
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+  } from '@chakra-ui/react'
 
 function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey, setToken, serverSeries, availableCredits, setAvailableCredits}) {
     const [contentType, setContentType] = useState('pdf');
@@ -20,6 +29,9 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const [showSpinner, setShowSpinner] = useState(false);
     const [description, setDescription] = useState('');
     const [text, _setText] = useState('');
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [modalHeader, setModalHeader] = useState('Important');
+    const [modalText, setModalText] = useState('');
 
     const navigate = useNavigate();
 
@@ -157,15 +169,10 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const onDrop = useCallback( async acceptedFiles => {
         setAlertMessage('');
 
-        if (!botNameRef.current) {
-            setAlertStatus('error');
-            setAlertMessage('Please enter a name for your bot before uploading files.');
-            return;
-        }
-
         if (contentType === 'pdf' && acceptedFiles[0].type !== 'application/pdf') {
-            setAlertStatus('error');
-            setAlertMessage('Please submit a PDF file.');
+            setModalHeader('Not a PDF File');
+            setModalText('Instant Chatbot currently supports text-based PDF files.<br /><br /><b>Coming soon!</b> Instant Chatbot will soon support bots based on text, Word docs, URLs, and even entire websites.');
+            onOpen();
             return;
         }
 
@@ -185,9 +192,16 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             response = await axios(request)
         } catch (err) {
             console.error(err.response);
+            setShowSpinner(false);
+            if (err.response.status === 401) {
+                setModalHeader('Unsupported PDF');
+                setModalText('The uploaded PDF is not a text pdf.<br /><br /><b>Coming soon!</b> Instant Chatbot will soon have OCR technology to support all types of PDFs.');
+                onOpen();
+                return;
+            }
             setAlertStatus('error');
             setAlertMessage('Server error. Unable to upload PDF.');
-            setShowSpinner(false);
+            
             return;
         }
         setShowSpinner(false);
@@ -350,7 +364,11 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
   return (
     
     <Container backgroundColor='white'>
-        <Text color='navy' textAlign={'right'}>Available Credits: {availableCredits}</Text>   
+        <Box display='flex' justifyContent={'space-between'}>
+        <Text color='navy' >Available Credits: {availableCredits}</Text>   
+            <Text color='navy' >Text Size: {text.length.toLocaleString()}</Text>
+            
+        </Box>
         <Heading as='h1' textAlign="center">Create Bot</Heading>
         <Box
             as="section"
@@ -388,11 +406,11 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                 /> */}
            
             <Text marginTop="1.25rem">Load Content:</Text>
-            <Select value={contentType} onChange={(e) => console.log(setContentType(e.target.value))}>
+            {/* <Select value={contentType} onChange={(e) => console.log(setContentType(e.target.value))}>
                 <option value='pdf'>PDF</option>
-                {/* <option value='scanned'>Scanned PDF</option>
-                <option value='docx'>DOCX</option> */}
-            </Select>
+                <option value='scanned'>Scanned PDF</option>
+                <option value='docx'>DOCX</option>
+            </Select> */}
             <Box marginTop="8px" height="96px" padding='.5rem' border='1px solid var(--chakra-colors-gray-200)' borderRadius='8px' cursor='pointer'>
                 <div {...getRootProps()}>
                     <input {...getInputProps()} />
@@ -407,6 +425,27 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     {showSpinner && <Box height='100vh' width="100vw" position='fixed' top='0' left='0' display='flex' justifyContent={'center'} alignItems={'center'}>
         <Spinner size='xl' color='navy'/>
     </Box> }
+
+    <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader textAlign={'center'}>{modalHeader}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+          <Text dangerouslySetInnerHTML={{__html: modalText}}>
+            
+          </Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onClose} display="block" margin="auto">
+              Close
+            </Button>
+            
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
     </Container>
   )
 }
