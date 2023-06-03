@@ -14,6 +14,7 @@ import {
     ModalBody,
     ModalCloseButton,
   } from '@chakra-ui/react'
+import DisplayText from '../Components/DisplayText';
 
 function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey, setToken, serverSeries, availableCredits, setAvailableCredits}) {
     const [contentType, setContentType] = useState('pdf');
@@ -360,6 +361,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                     />
             </FormControl>
             <Button display="block" margin="1rem auto" variant="primary" onClick={setOpenAIKey}>Submit</Button>
+           
             </Container>
         )
     }
@@ -423,6 +425,11 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                 </div>
             </Box>
         </Flex> 
+        { text.map(el => {
+                console.log('el', el);
+                return <DisplayText key={el.id} text={el} setText={setText}/>
+                })
+            }
         </Container>
     </Box>
     {showSpinner && <Box height='100vh' width="100vw" position='fixed' top='0' left='0' display='flex' justifyContent={'center'} alignItems={'center'}>
