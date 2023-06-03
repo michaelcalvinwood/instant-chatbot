@@ -186,7 +186,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         acceptedFiles.forEach(file =>fd.append('File[]',file));
 
         let request = {
-            url: `https://pdf.instantchatbot.net:6256/convertPdfToText/?t=${token}`,
+            url: `https://text.instantchatbot.net:6256/convertPdfToText/?t=${token}`,
             method: 'post',
             data: fd,
             headers: { 'Content-Type': 'multipart/form-data' }
@@ -425,11 +425,11 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                 </div>
             </Box>
         </Flex> 
-        {text.length && <Button display="block" margin="1rem auto" variant="primary">Create</Button>} 
+        {text.length > 0 && <Button display="block" margin="1rem auto" variant="primary">Create</Button>} 
         {text.length > 0 && <Heading size={'sm'} color='navy' textAlign={'center'} margin='.5rem 0'>Content</Heading>}
         { text.map(el => {
                 console.log('el', el);
-                return <DisplayText key={el.id} text={el} setText={setText}/>
+                return <DisplayText key={el.id} text={el} setText={_setText} textRef={textRef}/>
                 })
             }
         </Container>
