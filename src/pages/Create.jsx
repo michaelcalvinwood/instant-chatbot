@@ -28,7 +28,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const [infoUploaded, setInfoUploaded] = useState(false);
     const [showSpinner, setShowSpinner] = useState(false);
     const [description, setDescription] = useState('');
-    const [text, _setText] = useState('');
+    const [text, _setText] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [modalHeader, setModalHeader] = useState('Important');
     const [modalText, setModalText] = useState('');
@@ -45,10 +45,11 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const textRef = useRef('');
 
     const setText = data => {
-        let curText = textRef.current;
-        let newText = curText + "\n" + data;
-        textRef.current = newText;
-        _setText(newText)
+        let curText = textRef.current ? textRef.current : [];
+        console.log('curText', typeof curText, curText);
+        curText.push(data);        
+        textRef.current = curText;
+        _setText(curText)
     }
 
     const setOpenAiKeys = value => {
@@ -169,6 +170,8 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const onDrop = useCallback( async acceptedFiles => {
         setAlertMessage('');
 
+        console.log('acceptedFiles', acceptedFiles);
+
         if (contentType === 'pdf' && acceptedFiles[0].type !== 'application/pdf') {
             setModalHeader('Not a PDF File');
             setModalText('Instant Chatbot currently supports text-based PDF files.<br /><br /><b>Coming soon!</b> Instant Chatbot will soon support bots based on text, Word docs, URLs, and even entire websites.');
@@ -205,7 +208,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
             return;
         }
         setShowSpinner(false);
-        setText(response.data);
+        setText({text: response.data, name: acceptedFiles[0].name, type: 'pdf', id: uuidv4()});
         return;
 
 
