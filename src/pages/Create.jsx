@@ -425,6 +425,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                 </div>
             </Box>
         </Flex> 
+        {text.length && <Button display="block" margin="1rem auto" variant="primary">Create</Button>} 
         {text.length > 0 && <Heading size={'sm'} color='navy' textAlign={'center'} margin='.5rem 0'>Content</Heading>}
         { text.map(el => {
                 console.log('el', el);
