@@ -213,22 +213,21 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
         setText({text: response.data, name: acceptedFiles[0].name, type: 'pdf', id: uuidv4()});
         return;
 
+    });
 
-
-
-
-        request = {
+    const deploy = async () => {
+        let request = {
             url: 'https://admin.instantchatbot.net:6200/newBot',
             method: 'post',
             data: {
                 token,
                 botName: botNameRef.current,
-                websites: '',
+                websites: domains,
                 botType: 'standard'
             }
         }
 
-       
+        let response;
 
         try {
             response = await axios(request)
@@ -242,58 +241,14 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
 
         const {botToken, serverSeries} = response.data;
         const theBotId = response.data.botId;
-      
-        const newFileName = `${uuidv4()}--${acceptedFiles[0].name.replaceAll('--', '-')}`;
-
+                    
         request = {
-            url: `https://ingest-${serverSeries}.instantchatbot.net:6201/presignedUrl?bt=${botToken}`,
+            url: `https://ingest-${serverSeries}.instantchatbot.net:6201/ingestText`,
             method: 'post',
             data: {
-                fileName: newFileName
-            }
-        }
-
-        try {
-            response = await axios(request);
-        } catch(err) {
-            console.error(err);
-            setAlertStatus('error');
-            setAlertMessage('Server error. Unable to get authorization to upload file. Please try again later');
-            setShowSpinner(false);
-            return;
-        }
-
-        const url = response.data;
-        console.log('url',url);
-
-        var file = acceptedFiles[0];
-        
-        var options = {
-            headers: {
-            'Content-Type': file.type,
-            'x-amz-acl': 'public-read'
-                }
-            };
-
-            try {
-                response = await axios.put(url, file, options);
-            }
-            catch(err) {
-                console.log('err.response', err.response);
-                console.error(err);
-               
-                setAlertStatus('error');
-                setAlertMessage('Server error. Unable to upload pdf. Please try again later.');
-                return setShowSpinner(false);
-                
-            }
-              
-        request = {
-            url: `https://ingest-${serverSeries}.instantchatbot.net:6201/ingestS3Pdf?bt=${botToken}`,
-            method: 'post',
-            data: {
-                url: `https://instantchatbot.nyc3.digitaloceanspaces.com/${theBotId}/${newFileName}`,
-                description
+                botToken,
+                description,
+                text
             }
         }
 
@@ -310,7 +265,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                 return setShowSpinner(false);
             }
             setAlertStatus('error');
-            setAlertMessage('Server error. Unable to process pdf. Please try again later.');
+            setAlertMessage('Server error. Unable to process text. Please try again later.');
             setShowSpinner(false);
             return;
         }
@@ -322,7 +277,9 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
 
         navigate(`/bots/${theBotId}`)
         return;
-      })
+
+    }
+
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
  
@@ -436,7 +393,12 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                 </div>
             </Box>
         </Flex> 
-        {text.length > 0 && <Button display="block" margin="1rem auto" variant="primary">Create</Button>} 
+        {<Button display="block" margin="1rem auto" variant="primary" 
+            visibility={text.length > 0 && botName ? 'visible' : 'hidden'}
+            onClick={deploy}
+        >
+            Deploy
+        </Button>} 
         {text.length > 0 && <Heading size={'sm'} color='navy' textAlign={'center'} margin='.5rem 0'>Content</Heading>}
         { text.map(el => {
                 console.log('el', el);
