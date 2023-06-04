@@ -33,6 +33,7 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [modalHeader, setModalHeader] = useState('Important');
     const [modalText, setModalText] = useState('');
+    const [domains, setDomains] = useState('');
 
     const navigate = useNavigate();
 
@@ -397,6 +398,16 @@ function Create({storageTokens, queryTokens, userName, hasKey, token, setHasKey,
                     onChange={(e) => {
                         setAlertMessage('');
                         setBotName(e.target.value)               
+                    }}
+                />
+
+                <Text  marginTop="1rem">
+                    Websites:
+                </Text>
+                <Textarea id="medium" size="md" placeholder=" " data-peer  value={botName}
+                    onChange={(e) => {
+                        setAlertMessage('');
+                        setDomains(e.target.value)               
                     }}
                 />
             
